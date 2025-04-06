@@ -1,0 +1,28 @@
+.services-section {
+  padding: 3rem 0;
+}
+
+.service-card {
+  height: 100%;
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding: 1.5rem;
+}
+
+.service-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.service-link {
+  color: #4CAF50;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.3s;
+}
+
+.service-link:hover {
+  color: #3e8e41;
+}

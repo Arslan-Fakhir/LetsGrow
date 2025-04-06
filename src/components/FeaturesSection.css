@@ -1,0 +1,19 @@
+.features-section {
+  padding: 3rem 0;
+  background-color: #f8f9fa;
+}
+
+.feature-card {
+  height: 100%;
+  border: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.feature-title {
+  font-weight: 700;
+}

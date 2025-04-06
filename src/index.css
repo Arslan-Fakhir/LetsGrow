@@ -1,0 +1,22 @@
+:root {
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.btn-custom {
+  background-color: #10B981;
+  color: white;
+  border: none;
+}
+
+.btn-custom:hover {
+  background-color: #059669;
+  color: white;
+}
+
+.text-custom {
+  color: #10B981;
+}
+
+.bg-custom {
+  background-color: #10B981;
+}
