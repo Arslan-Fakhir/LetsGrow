@@ -1,0 +1,30 @@
+.signup-card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.signup-card:hover {
+  transform: translateY(-5px);
+}
+
+.signup-button {
+  transition: all 0.3s ease;
+}
+
+.signup-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(16, 185, 129, 0.1);
+}
+
+.user-type-container {
+  display: flex;
+  gap: 2rem;
+}
+
+.login-link {
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.login-link:hover {
+  color: #059669 !important;
+}

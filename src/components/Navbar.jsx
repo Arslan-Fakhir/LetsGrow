@@ -23,7 +23,7 @@ function Navbar() {
           <Nav className="ms-auto align-items-center">
             <Nav.Link
               as={Link}
-              to="/"
+              to="/home"
               className="nav-link-custom"
               onClick={() => setExpanded(false)}
             >
