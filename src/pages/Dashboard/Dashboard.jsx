@@ -49,7 +49,7 @@ function Dashboard() {
   const handleStartupSubmit = (e) => {
     e.preventDefault();
     console.log("Startup Application:", startupForm);
-    setShowStartupModal(false);
+    setShowStartupMnpmodal(false);
   };
 
   const handleManpowerSubmit = (e) => {
