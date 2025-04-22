@@ -7,6 +7,9 @@ import Signup from "./pages/Signup/Signup";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Role from "./pages/RoleSelection/RoleSelection";
 
+import Admin from "./pages/Admin/Admin";
+//import './assets/GlobalDashboard.css';
+
 function App() {
   return (
     <Router>
@@ -18,6 +21,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </main>
         <Footer />
