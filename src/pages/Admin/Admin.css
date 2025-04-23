@@ -1,0 +1,18 @@
+/* Import all component styles here if needed */
+.hover-item {
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .hover-item:hover {
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .hover-show {
+    transition: opacity 0.3s ease;
+  }
+  
+  .hover-card:hover .hover-show {
+    opacity: 1 !important;
+  }

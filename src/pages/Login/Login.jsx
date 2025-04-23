@@ -15,7 +15,7 @@ function Login() {
     // Handle login logic here
     console.log("Login attempt:", formData);
     // Redirect to dashboard after successful login
-    navigate("/dashboard");
+    navigate("/admin");
   };
 
   const handleChange = (e) => {
