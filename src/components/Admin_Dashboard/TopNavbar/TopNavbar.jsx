@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Bell, User, Settings, HelpCircle, LogOut, Menu, UserPlus, Lightbulb } from "lucide-react"
 import "./TopNavbar.css"
 
@@ -9,9 +9,12 @@ const TopNavbar = ({ toggleSidebar }) => {
   const [currentTime, setCurrentTime] = useState(new Date())
   const [notificationOpen, setNotificationOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
+  const navigate = useNavigate()
   const notificationRef = useRef(null)
   const profileRef = useRef(null)
+  const logoutModalRef = useRef(null)
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -38,6 +41,23 @@ const TopNavbar = ({ toggleSidebar }) => {
     return () => clearInterval(timer)
   }, [])
 
+  const handleLogoutClick = (e) => {
+    e.preventDefault()
+    setShowLogoutConfirm(true)
+    setProfileOpen(false) // Close the profile dropdown
+  }
+
+  const handleLogoutConfirm = () => {
+    // Perform logout actions here (clear tokens, etc.)
+    // Then redirect to login page
+    navigate("/login") // Redirect to your existing login page
+    setShowLogoutConfirm(false)
+  }
+
+  const handleLogoutCancel = () => {
+    setShowLogoutConfirm(false)
+  }
+
   return (
     <header className="bg-dark text-white py-2 px-3 d-flex align-items-center justify-content-between sticky-top">
       <div className="d-flex align-items-center gap-2 d-md-none">
@@ -52,9 +72,9 @@ const TopNavbar = ({ toggleSidebar }) => {
           <span className="fw-bold fs-5">Let's Grow</span>
         </Link>
       </div>
-  
+
       {/* Navigation links moved to the right */}
-      <nav className="d-none d-md-flex align-items-center justify-content-center gap-4 mx-auto">
+      <nav className="d-none d-md-flex align-items-center justify-content-end gap-4 ms-auto">
         <Link to="/" className="text-success text-decoration-none nav-link-hover">
           Home
         </Link>
@@ -158,13 +178,38 @@ const TopNavbar = ({ toggleSidebar }) => {
                 <HelpCircle size={16} className="me-2" /> <span>Help Center</span>
               </a>
               <div className="dropdown-divider my-1"></div>
-              <a href="#" className="d-flex align-items-center p-2 text-decoration-none text-dark custom-dropdown-item">
+              <a
+                href="#"
+                className="d-flex align-items-center p-2 text-decoration-none text-dark custom-dropdown-item"
+                onClick={handleLogoutClick}
+                data-logout-trigger="true"
+              >
                 <LogOut size={16} className="me-2" /> <span>Log Out</span>
               </a>
             </div>
           )}
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="logout-modal-overlay">
+          <div className="logout-modal-container" ref={logoutModalRef}>
+            <div className="logout-modal-content">
+              <h5 className="mb-3">Confirm Logout</h5>
+              <p>Are you sure you want to logout?</p>
+              <div className="d-flex justify-content-end gap-2 mt-4">
+                <button className="btn btn-secondary" onClick={handleLogoutCancel}>
+                  No
+                </button>
+                <button className="btn btn-danger" onClick={handleLogoutConfirm}>
+                  Yes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   )
 }
