@@ -1,19 +1,42 @@
-import { Link } from "react-router-dom";
-import { useState } from 'react';
-import { 
-  Search, LogOut, Home, Lightbulb, Users, Award, FileText, Settings, 
-  PieChart, TrendingUp, MessageSquare, Calendar, Lock, ChevronLeft, 
-  ChevronRight, X, Menu 
-} from 'lucide-react';
-import "./Sidebar.css";
+"use client"
 
-const Sidebar = ({ 
-  activeMenuItem, 
-  setActiveMenuItem,
-  sidebarExpanded,
-  toggleSidebar
-}) => {
-  const [searchQuery, setSearchQuery] = useState("");
+import { Link, useLocation } from "react-router-dom"
+import { useState, useEffect } from "react"
+import {
+  Search,
+  LogOut,
+  Home,
+  Lightbulb,
+  Users,
+  Award,
+  FileText,
+  Settings,
+  PieChart,
+  TrendingUp,
+  MessageSquare,
+  Calendar,
+  Lock,
+  ChevronLeft,
+  ChevronRight,
+  X,
+  Menu,
+} from "lucide-react"
+import "./Sidebar.css"
+
+const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSidebar }) => {
+  const [searchQuery, setSearchQuery] = useState("")
+  const location = useLocation()
+
+  // Update active menu item based on current route
+  useEffect(() => {
+    const path = location.pathname
+    const menuItem =
+      menuItems.find((item) => item.path === path) || additionalMenuItems.find((item) => item.path === path)
+
+    if (menuItem) {
+      setActiveMenuItem(menuItem.name)
+    }
+  }, [location, setActiveMenuItem])
 
   const menuItems = [
     { name: "Dashboard", icon: Home, path: "/dashboard" },
@@ -22,7 +45,7 @@ const Sidebar = ({
     { name: "Our Leadership", icon: Award, path: "/leadership" },
     { name: "Latest News & Events", icon: FileText, path: "/news-events" },
     { name: "Settings", icon: Settings, path: "/settings" },
-  ];
+  ]
 
   const additionalMenuItems = [
     { name: "Analytics", icon: PieChart, path: "/analytics" },
@@ -30,7 +53,7 @@ const Sidebar = ({
     { name: "Messages", icon: MessageSquare, path: "/messages" },
     { name: "Calendar", icon: Calendar, path: "/calendar" },
     { name: "Security", icon: Lock, path: "/security" },
-  ];
+  ]
 
   return (
     <>
@@ -62,18 +85,14 @@ const Sidebar = ({
         }`}
         style={{
           width: sidebarExpanded ? "250px" : "80px",
-          left: sidebarExpanded ? "0" : "-80px",
+          left: sidebarExpanded || window.innerWidth >= 768 ? "0" : "-80px",
           zIndex: 1030,
           transition: "all 0.3s ease-in-out",
         }}
         aria-expanded={sidebarExpanded}
       >
         <div className="d-flex align-items-center justify-content-between p-3 border-bottom">
-          <Link 
-            to="/" 
-            className="text-decoration-none text-dark d-flex align-items-center gap-2"
-            aria-label="Home"
-          >
+          <Link to="/" className="text-decoration-none text-dark d-flex align-items-center gap-2" aria-label="Home">
             <div style={{ width: "32px", height: "32px" }}>
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -88,8 +107,8 @@ const Sidebar = ({
             </div>
             {sidebarExpanded && <h1 className="fs-5 fw-bold mb-0">let's grow</h1>}
           </Link>
-          <button 
-            className="btn btn-sm btn-light d-none d-md-flex" 
+          <button
+            className="btn btn-sm btn-light d-none d-md-flex"
             onClick={toggleSidebar}
             aria-label={sidebarExpanded ? "Collapse sidebar" : "Expand sidebar"}
           >
@@ -99,7 +118,9 @@ const Sidebar = ({
 
         <div className="p-3">
           <div className="position-relative">
-            <label htmlFor="sidebar-search" className="visually-hidden">Search</label>
+            <label htmlFor="sidebar-search" className="visually-hidden">
+              Search
+            </label>
             <Search
               className="position-absolute"
               style={{
@@ -134,16 +155,13 @@ const Sidebar = ({
               className={`btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
                 activeMenuItem === item.name ? "active-menu-item" : ""
               }`}
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveMenuItem(item.name);
-              }}
+              onClick={() => setActiveMenuItem(item.name)}
               aria-current={activeMenuItem === item.name ? "page" : undefined}
             >
               <div className="d-flex align-items-center gap-3">
-                <item.icon 
-                  size={20} 
-                  className={activeMenuItem === item.name ? "text-success" : "text-secondary"} 
+                <item.icon
+                  size={20}
+                  className={activeMenuItem === item.name ? "text-success" : "text-secondary"}
                   aria-hidden="true"
                 />
                 {sidebarExpanded && <span>{item.name}</span>}
@@ -164,16 +182,13 @@ const Sidebar = ({
               className={`btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
                 activeMenuItem === item.name ? "active-menu-item" : ""
               }`}
-              onClick={(e) => {
-                e.preventDefault();
-                setActiveMenuItem(item.name);
-              }}
+              onClick={() => setActiveMenuItem(item.name)}
               aria-current={activeMenuItem === item.name ? "page" : undefined}
             >
               <div className="d-flex align-items-center gap-3">
-                <item.icon 
-                  size={20} 
-                  className={activeMenuItem === item.name ? "text-success" : "text-secondary"} 
+                <item.icon
+                  size={20}
+                  className={activeMenuItem === item.name ? "text-success" : "text-secondary"}
                   aria-hidden="true"
                 />
                 {sidebarExpanded && <span>{item.name}</span>}
@@ -191,6 +206,9 @@ const Sidebar = ({
                   alt="Admin profile"
                   className="rounded-circle w-100 h-100"
                   style={{ objectFit: "cover" }}
+                  onError={(e) => {
+                    e.target.src = "https://via.placeholder.com/40"
+                  }}
                 />
               </div>
               <div className="ms-2">
@@ -200,20 +218,17 @@ const Sidebar = ({
             </div>
           )}
 
-          <button
+          <Link
+            to="/logout"
             className="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2 menu-item"
-            onClick={(e) => {
-              e.preventDefault();
-              // Handle logout logic here
-            }}
           >
             <LogOut size={18} aria-hidden="true" />
             {sidebarExpanded && <span>Log Out</span>}
-          </button>
+          </Link>
         </div>
       </aside>
     </>
-  );
-};
+  )
+}
 
 export default Sidebar;
