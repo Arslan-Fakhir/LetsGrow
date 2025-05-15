@@ -168,7 +168,15 @@ const TopNavbar = ({ toggleSidebar }) => {
               className="position-absolute end-0 mt-2 bg-white rounded shadow custom-dropdown-menu"
               style={{ minWidth: "200px", zIndex: 1050 }}
             >
-              <a href="#" className="d-flex align-items-center p-2 text-decoration-none text-dark custom-dropdown-item">
+              <a
+                href="#"
+                className="d-flex align-items-center p-2 text-decoration-none text-dark custom-dropdown-item"
+                onClick={(e) => {
+                  e.preventDefault()
+                  navigate("/user-profile")
+                  setProfileOpen(false)
+                }}
+              >
                 <User size={16} className="me-2" /> <span>Profile</span>
               </a>
               <a href="#" className="d-flex align-items-center p-2 text-decoration-none text-dark custom-dropdown-item">
@@ -197,7 +205,7 @@ const TopNavbar = ({ toggleSidebar }) => {
           <div className="logout-modal-container" ref={logoutModalRef}>
             <div className="logout-modal-content">
               <h5 className="mb-3">Confirm Logout</h5>
-              <p>Are you sure you want to logout?</p>
+              <p className="text-primary fw-bold">Are you sure you want to logout?</p>
               <div className="d-flex justify-content-end gap-2 mt-4">
                 <button className="btn btn-secondary" onClick={handleLogoutCancel}>
                   No

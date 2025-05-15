@@ -1,0 +1,37 @@
+.profile-form {
+  padding-top: 0.5rem;
+}
+
+.form-control {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  padding: 0.75rem;
+}
+
+.form-control:focus {
+  border-color: #4ade80;
+  box-shadow: 0 0 0 0.25rem rgba(74, 222, 128, 0.25);
+}
+
+.form-control-static {
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 0.25rem;
+  min-height: 40px;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #495057;
+}
+
+.btn-success {
+  background-color: #4ade80;
+  border-color: #4ade80;
+}
+
+.btn-success:hover {
+  background-color: #22c55e;
+  border-color: #22c55e;
+}

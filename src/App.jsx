@@ -8,11 +8,13 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Role from "./pages/RoleSelection/RoleSelection";
 import ManageIdeas from "./pages/ManageIdeas/ManageIdeas";
 import ManageInvestments from "./pages/ManageInvestments/ManageInvestments";
+import UserProfile from "./pages/UserProfile/UserProfile"
 // import Admin from "./pages/Admin/Admin"
 //import Sidebar from "./components/Sidebar";
 import Admin from "./pages/Admin/Admin";
 //import { Sidebar } from "lucide-react";
 //import './assets/GlobalDashboard.css';
+
 
 function App() {
   return (
@@ -26,6 +28,7 @@ function App() {
             <Route path="/manage-ideas" element={<ManageIdeas />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/user-profile" element={<UserProfile />} />
             <Route path="/manage-investment" element={<ManageInvestments />} />
             
           </Routes>

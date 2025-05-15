@@ -1,0 +1,33 @@
+.profile-card {
+  border-radius: 12px;
+  background-color: #fff;
+}
+
+/* Success message animation */
+.save-success-message {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1040;
+  animation: fadeInOut 3s ease-in-out;
+  min-width: 250px;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
