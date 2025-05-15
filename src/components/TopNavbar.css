@@ -1,0 +1,94 @@
+/* Navigation link hover effects */
+.nav-link-hover {
+  transition: all 0.3s ease;
+}
+
+.nav-link-hover:hover {
+  color: #4ade80 !important;
+}
+
+/* Custom dropdown styling for manual implementation */
+.custom-dropdown-menu {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.custom-dropdown-item {
+  transition: background-color 0.2s;
+}
+
+.custom-dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-divider {
+  border-top: 1px solid #e9ecef;
+  margin: 0.5rem 0;
+}
+
+/* Bootstrap dropdown overrides */
+.dropdown-menu {
+  margin-top: 0.5rem !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem !important;
+  transition: background-color 0.2s !important;
+  color: #212529 !important;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa !important;
+}
+
+.dropdown-item:active {
+  background-color: #e9ecef !important;
+  color: #212529 !important;
+}
+
+/* Hide dropdown toggle arrow */
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+/* Logout confirmation modal */
+.logout-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.logout-modal-container {
+  background-color: white;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.3s ease-out forwards;
+}
+
+.logout-modal-content {
+  padding: 20px;
+  color: #000000 !important; 
+  font-size: 1.1rem;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

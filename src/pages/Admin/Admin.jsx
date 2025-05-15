@@ -181,7 +181,7 @@ const Admin = () => {
                         <div className="col-md-4">
                           <ManagementCard 
                             icon={Gift}
-                            title="Manage Donations"
+                            title="Manage Investment"
                             color="success"
                             totalLabel="Total Amount"
                             totalValue={542680}
@@ -193,7 +193,7 @@ const Admin = () => {
                             rightLabel="Campaigns"
                             rightValue={24}
                             progressPercent={65}
-                            path="/manage-donations"
+                            path="/manage-investment"
                           />
                         </div>
                         <div className="col-md-4">
@@ -220,68 +220,7 @@ const Admin = () => {
                 </div>
 
                 {/* Working Progress & Pending Requests */}
-                <div className="col-md-6">
-                  <div className="card border-0 shadow-sm hover-card">
-                    <div className="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
-                      <h5 className="mb-0 fw-bold">Working Progress</h5>
-                      <button className="btn btn-sm btn-outline-light">View All</button>
-                    </div>
-                    <div className="card-body p-4">
-                      <div className="d-flex align-items-center justify-content-between mb-4">
-                        <ProgressChart percentage={85} color="#198754" size={100} label="Completed" />
-                        <div className="ms-4">
-                          <div className="mb-3">
-                            <div className="d-flex justify-content-between align-items-center mb-1">
-                              <span className="fw-medium">Website Redesign</span>
-                              <span className="badge bg-success">85%</span>
-                            </div>
-                            <div className="progress" style={{ height: "6px" }}>
-                              <div
-                                className="progress-bar bg-success"
-                                style={{ width: "85%" }}
-                                role="progressbar"
-                              ></div>
-                            </div>
-                          </div>
-                          <div className="mb-3">
-                            <div className="d-flex justify-content-between align-items-center mb-1">
-                              <span className="fw-medium">Mobile App</span>
-                              <span className="badge bg-primary">65%</span>
-                            </div>
-                            <div className="progress" style={{ height: "6px" }}>
-                              <div
-                                className="progress-bar bg-primary"
-                                style={{ width: "65%" }}
-                                role="progressbar"
-                              ></div>
-                            </div>
-                          </div>
-                          <div>
-                            <div className="d-flex justify-content-between align-items-center mb-1">
-                              <span className="fw-medium">Database Migration</span>
-                              <span className="badge bg-warning">45%</span>
-                            </div>
-                            <div className="progress" style={{ height: "6px" }}>
-                              <div
-                                className="progress-bar bg-warning"
-                                style={{ width: "45%" }}
-                                role="progressbar"
-                              ></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="d-flex align-items-center justify-content-between">
-                        <div className="d-flex align-items-center">
-                          <Clock size={18} className="text-muted me-2" />
-                          <span className="text-muted small">Last updated: Today, 2:30 PM</span>
-                        </div>
-                        <button className="btn btn-sm btn-dark">View Details</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
+               
                 <div className="col-md-6">
                   <div className="card border-0 shadow-sm hover-card">
                     <div className="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
