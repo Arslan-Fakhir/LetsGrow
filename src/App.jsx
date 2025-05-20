@@ -6,8 +6,8 @@ import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import EntrepreneurDashboard from "./pages/Dashboard/EntrepreneurDashboard";
 import Role from "./pages/RoleSelection/RoleSelection";
-import StartupForm from "./components/EntrepreneurDashboardComponents/forms/StartupForm"
-import ManpowerForm from "./components/EntrepreneurDashboardComponents/forms/ManpowerForm"
+import StartupForm from "./components/EntrepreneurDashboardComponents/forms/StartupForm";
+import ManpowerForm from "./components/EntrepreneurDashboardComponents/forms/ManpowerForm";
 import FundingForm from "./components/EntrepreneurDashboardComponents/forms/FundingForm";
 
 function App() {
