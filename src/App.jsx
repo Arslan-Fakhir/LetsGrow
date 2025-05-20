@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Navbar from "./components/EntrepreneurDashboardComponents/navbar/TopNavbar";
+import Navbar from "./components/EntrepreneurDashboardComponents/TopNavbar/TopNavbar";
 //import Home from "./pages/HomePage/HomePage";
 //import Footer from "./components/Footer";
 import Login from "./pages/Login/Login";
@@ -9,13 +9,15 @@ import Role from "./pages/RoleSelection/RoleSelection";
 import StartupForm from "./components/EntrepreneurDashboardComponents/forms/StartupForm";
 import ManpowerForm from "./components/EntrepreneurDashboardComponents/forms/ManpowerForm";
 import FundingForm from "./components/EntrepreneurDashboardComponents/forms/FundingForm";
-
+import Sidebar from "./components/EntrepreneurDashboardComponents/Sidebar/Sidebar"
 function App() {
   return (
     <Router>
       <div className="min-vh-100 d-flex flex-column">
-        {/*<Navbar />*/}
+        <Navbar />
+        
         <main className="flex-grow-1">
+          
           <Routes>
             <Route index element={<Role />} />
             <Route path="/login" element={<Login />} />
