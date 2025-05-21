@@ -1,14 +1,10 @@
-"use client"
-
-import { Link, useLocation } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   Search,
   LogOut,
   Home,
   Lightbulb,
-  Users,
-  Award,
   FileText,
   Settings,
   PieChart,
@@ -20,44 +16,47 @@ import {
   ChevronRight,
   X,
   Menu,
-} from "lucide-react"
-import "./Sidebar.css"
+  Target,
+  Users,
+  DollarSign,
+  Briefcase,
+} from "lucide-react";
+import "./Sidebar.css";
 
 const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSidebar }) => {
-  const [searchQuery, setSearchQuery] = useState("")
-  const location = useLocation()
+  const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
 
-  // Update active menu item based on current route
   useEffect(() => {
-    const path = location.pathname
+    const path = location.pathname;
     const menuItem =
-      menuItems.find((item) => item.path === path) || additionalMenuItems.find((item) => item.path === path)
+      menuItems.find((item) => item.path === path) || additionalMenuItems.find((item) => item.path === path);
 
     if (menuItem) {
-      setActiveMenuItem(menuItem.name)
+      setActiveMenuItem(menuItem.name);
     }
-  }, [location, setActiveMenuItem])
+  }, [location, setActiveMenuItem]);
 
   const menuItems = [
     { name: "Dashboard", icon: Home, path: "/dashboard" },
-    { name: "Manage Ideas", icon: Lightbulb, path: "/manage-ideas" },
-    { name: "Manage Users", icon: Users, path: "/manage-users" },
-    { name: "Our Leadership", icon: Award, path: "/leadership" },
-    { name: "Latest News & Events", icon: FileText, path: "/news-events" },
+    { name: "My Startup", icon: Briefcase, path: "/my-startup" },
+    { name: "Ideas Board", icon: Lightbulb, path: "/ideas" },
+    { name: "Team Management", icon: Users, path: "/team" },
+    { name: "Latest Updates", icon: FileText, path: "/updates" },
     { name: "Settings", icon: Settings, path: "/settings" },
-  ]
+  ];
 
   const additionalMenuItems = [
     { name: "Analytics", icon: PieChart, path: "/analytics" },
-    { name: "Investments", icon: TrendingUp, path: "/investments" },
+    { name: "Startup Progress", icon: Target, path: "/progress" },
+    { name: "Funding", icon: DollarSign, path: "/funding" },
     { name: "Messages", icon: MessageSquare, path: "/messages" },
     { name: "Calendar", icon: Calendar, path: "/calendar" },
     { name: "Security", icon: Lock, path: "/security" },
-  ]
+  ];
 
   return (
     <>
-      {/* Mobile Sidebar Toggle */}
       <button
         className="d-md-none position-fixed bottom-0 end-0 m-3 btn btn-success rounded-circle z-3 shadow"
         style={{ width: "50px", height: "50px" }}
@@ -67,7 +66,6 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
         {sidebarExpanded ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      {/* Overlay for mobile */}
       {sidebarExpanded && (
         <div
           className="d-md-none position-fixed top-0 start-0 w-100 h-100 bg-dark opacity-50 z-2"
@@ -78,7 +76,6 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
         />
       )}
 
-      {/* Left Sidebar */}
       <aside
         className={`position-fixed d-flex flex-column h-100 bg-white shadow transition-all ${
           sidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"
@@ -94,16 +91,7 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
         <div className="d-flex align-items-center justify-content-between p-3 border-bottom">
           <Link to="/" className="text-decoration-none text-dark d-flex align-items-center gap-2" aria-label="Home">
             <div style={{ width: "32px", height: "32px" }}>
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M12 6.5C12 6.5 10 3 7 3C4 3 2 5 2 8C2 11 4 13 12 20C20 13 22 11 22 8C22 5 20 3 17 3C14 3 12 6.5 12 6.5Z"
-                  fill="#4ade80"
-                  stroke="#4ade80"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <Briefcase size={32} className="text-success" />
             </div>
             {sidebarExpanded && <h1 className="fs-5 fw-bold mb-0">let's grow</h1>}
           </Link>
@@ -171,7 +159,7 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
 
           {sidebarExpanded && (
             <div className="px-3 py-2 small text-muted" aria-hidden="true">
-              ADDITIONAL FEATURES
+              GROWTH & PROGRESS
             </div>
           )}
 
@@ -202,18 +190,15 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
             <div className="d-flex align-items-center mb-3">
               <div className="rounded-circle bg-light p-1" style={{ width: "40px", height: "40px" }}>
                 <img
-                  src="/placeholder-user.jpg"
-                  alt="Admin profile"
+                  src="https://via.placeholder.com/40"
+                  alt="Entrepreneur profile"
                   className="rounded-circle w-100 h-100"
                   style={{ objectFit: "cover" }}
-                  onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/40"
-                  }}
                 />
               </div>
               <div className="ms-2">
-                <div className="fw-medium">Admin User</div>
-                <div className="text-muted small">Super Admin</div>
+                <div className="fw-medium">John Doe</div>
+                <div className="text-muted small">Entrepreneur</div>
               </div>
             </div>
           )}
@@ -228,7 +213,7 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
         </div>
       </aside>
     </>
-  )
-}
+  );
+};
 
 export default Sidebar;

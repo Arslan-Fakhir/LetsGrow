@@ -1,62 +1,48 @@
-"use client"
-
-import { useState, useEffect, useRef } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { Bell, User, Settings, HelpCircle, LogOut, Menu, UserPlus, Lightbulb } from "lucide-react"
-import "./TopNavbar.css"
+import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Bell, User, Settings, HelpCircle, LogOut, Menu, UserPlus, Lightbulb } from "lucide-react";
+import "./TopNavbar.css";
 
 const TopNavbar = ({ toggleSidebar }) => {
-  const [currentTime, setCurrentTime] = useState(new Date())
-  const [notificationOpen, setNotificationOpen] = useState(false)
-  const [profileOpen, setProfileOpen] = useState(false)
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
-  const navigate = useNavigate()
-  const notificationRef = useRef(null)
-  const profileRef = useRef(null)
-  const logoutModalRef = useRef(null)
+  const navigate = useNavigate();
+  const notificationRef = useRef(null);
+  const profileRef = useRef(null);
+  const logoutModalRef = useRef(null);
 
-  // Close dropdowns when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (notificationRef.current && !notificationRef.current.contains(event.target)) {
-        setNotificationOpen(false)
+        setNotificationOpen(false);
       }
       if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setProfileOpen(false)
+        setProfileOpen(false);
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("mousedown", handleClickOutside);
     }
-  }, [])
-
-  // Update time every minute
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date())
-    }, 60000)
-    return () => clearInterval(timer)
-  }, [])
+  }, []);
 
   const handleLogoutClick = (e) => {
-    e.preventDefault()
-    setShowLogoutConfirm(true)
-    setProfileOpen(false) // Close the profile dropdown
-  }
+    e.preventDefault();
+    setShowLogoutConfirm(true);
+    setProfileOpen(false);
+  };
 
   const handleLogoutConfirm = () => {
-    // Perform logout actions here (clear tokens, etc.)
-    // Then redirect to login page
-    navigate("/login") // Redirect to your existing login page
-    setShowLogoutConfirm(false)
-  }
+    navigate("/login");
+    setShowLogoutConfirm(false);
+  };
 
   const handleLogoutCancel = () => {
-    setShowLogoutConfirm(false)
-  }
+    setShowLogoutConfirm(false);
+  };
 
   return (
     <header className="bg-dark text-white py-2 px-3 d-flex align-items-center justify-content-between sticky-top">
@@ -66,14 +52,12 @@ const TopNavbar = ({ toggleSidebar }) => {
         </button>
       </div>
 
-      {/* Logo or brand name */}
       <div className="d-flex align-items-center">
         <Link to="/" className="text-decoration-none text-white">
           <span className="fw-bold fs-5">Let's Grow</span>
         </Link>
       </div>
 
-      {/* Navigation links moved to the right */}
       <nav className="d-none d-md-flex align-items-center justify-content-end gap-4 ms-auto">
         <Link to="/" className="text-success text-decoration-none nav-link-hover">
           Home
@@ -93,14 +77,6 @@ const TopNavbar = ({ toggleSidebar }) => {
       </nav>
 
       <div className="d-flex align-items-center gap-3 ms-3">
-        <div className="d-none d-md-block text-light">
-          <small>
-            {currentTime.toLocaleDateString()} |{" "}
-            {currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-          </small>
-        </div>
-
-        {/* Notification Dropdown - Manual Implementation */}
         <div className="position-relative" ref={notificationRef}>
           <button className="btn btn-dark position-relative p-0" onClick={() => setNotificationOpen(!notificationOpen)}>
             <Bell size={22} />
@@ -148,19 +124,15 @@ const TopNavbar = ({ toggleSidebar }) => {
           )}
         </div>
 
-        {/* User Profile Dropdown - Manual Implementation */}
         <div className="position-relative" ref={profileRef}>
           <button className="btn btn-dark p-0" onClick={() => setProfileOpen(!profileOpen)}>
             <img
-              src="/placeholder-user.png"
+              src="https://via.placeholder.com/40"
               alt="User profile"
               className="rounded-circle"
               width="40"
               height="40"
               style={{ objectFit: "cover" }}
-              onError={(e) => {
-                e.target.src = "https://via.placeholder.com/40"
-              }}
             />
           </button>
           {profileOpen && (
@@ -191,7 +163,6 @@ const TopNavbar = ({ toggleSidebar }) => {
         </div>
       </div>
 
-      {/* Logout Confirmation Modal */}
       {showLogoutConfirm && (
         <div className="logout-modal-overlay">
           <div className="logout-modal-container" ref={logoutModalRef}>
@@ -211,7 +182,7 @@ const TopNavbar = ({ toggleSidebar }) => {
         </div>
       )}
     </header>
-  )
-}
+  );
+};
 
-export default TopNavbar
+export default TopNavbar;

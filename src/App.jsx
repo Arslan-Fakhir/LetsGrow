@@ -9,7 +9,7 @@ import Role from "./pages/RoleSelection/RoleSelection";
 import StartupForm from "./components/EntrepreneurDashboardComponents/forms/StartupForm";
 import ManpowerForm from "./components/EntrepreneurDashboardComponents/forms/ManpowerForm";
 import FundingForm from "./components/EntrepreneurDashboardComponents/forms/FundingForm";
-import Sidebar from "./components/EntrepreneurDashboardComponents/Sidebar/Sidebar"
+
 function App() {
   return (
     <Router>
@@ -17,7 +17,6 @@ function App() {
         <Navbar />
         
         <main className="flex-grow-1">
-          
           <Routes>
             <Route index element={<Role />} />
             <Route path="/login" element={<Login />} />
