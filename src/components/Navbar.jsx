@@ -11,7 +11,7 @@ function Navbar() {
     <BootstrapNavbar expanded={expanded} expand="md" className="navbar-custom">
       <Container>
         <BootstrapNavbar.Brand as={Link} to="/" className="brand-container">
-          <img src={logo} alt="Let's Grow" height="50" className="me-2" />
+          {/* <img src={logo} alt="Let's Grow" height="20" className="" /> */}
         </BootstrapNavbar.Brand>
 
         <BootstrapNavbar.Toggle
