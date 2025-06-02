@@ -13,7 +13,11 @@ import InvestorDashboard from "./pages/InvestorDashboard/InvestorDashboard";
 import Transaction from "./pages/InvestorDashboard/Transaction";
 import BrowseStartups from "./pages/InvestorDashboard/BrowseStartups";
 import FormPage from "./pages/InvestorDashboard/StartupDetails";
+import ManageIdeas from "./pages/ManageIdeas/ManageIdeas";
+import ManageInvestments from "./pages/ManageInvestments/ManageInvestments";
+import UserProfile from "./pages/UserProfile/UserProfile"
 import "./App.css";
+import Admin from "./pages/Admin/Admin";
 
 function App() {
   const [activeMenuItem, setActiveMenuItem] = useState('Dashboard');
@@ -50,6 +54,10 @@ function App() {
               <Route path="/transaction" element={<Transaction />} />
               <Route path="/browse" element={<BrowseStartups />} />
               <Route path="/showDetails" element={<FormPage />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/manage-ideas" element={<ManageIdeas />} />
+              <Route path="/user-profile" element={<UserProfile />} />
+              <Route path="/manage-investment" element={<ManageInvestments />} />
             </Routes>
           </div>
         </div>

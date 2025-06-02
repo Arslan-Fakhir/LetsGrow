@@ -1,0 +1,28 @@
+.sidebar-expanded {
+    width: 250px;
+  }
+  
+  .sidebar-collapsed {
+    width: 80px;
+  }
+  
+  @media (max-width: 767.98px) {
+    .sidebar-collapsed {
+      left: -80px;
+    }
+  }
+  
+  /* Menu item hover effects */
+  .menu-item {
+    transition: all 0.3s ease;
+  }
+  
+  .menu-item:hover {
+    background-color: #f8f9fa;
+    color: #198754 !important;
+  }
+  
+  .active-menu-item {
+    background-color: #e9ecef;
+    font-weight: 500;
+  }

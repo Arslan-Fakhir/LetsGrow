@@ -32,7 +32,7 @@ function Navbar() {
             </Nav.Link>
             <Nav.Link
               as={Link}
-              to="/services"
+              to="/admin"
               className="nav-link-custom"
               onClick={() => setExpanded(false)}
             >

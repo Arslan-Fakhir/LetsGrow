@@ -1,0 +1,190 @@
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+}
+
+.modal-container {
+  background-color: white;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.3s ease-out forwards;
+}
+
+.investment-details-modal {
+  max-width: 800px;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1rem;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Title section */
+.investment-title-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.investment-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0;
+  color: #212529;
+}
+
+.investment-amount {
+  color: #198754;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Info cards */
+.info-card {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  height: 100%;
+}
+
+.info-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(25, 135, 84, 0.1);
+  border-radius: 8px;
+  margin-right: 1rem;
+  color: #198754;
+}
+
+.info-card-content {
+  flex: 1;
+}
+
+.info-card-label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-card-value {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 0;
+  color: #212529;
+}
+
+/* Section styles */
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #212529;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.investment-description-section {
+  margin-top: 1.5rem;
+}
+
+.investment-description {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  line-height: 1.6;
+}
+
+/* Attachments */
+.attachments-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.attachment-item:hover {
+  background-color: #e9ecef;
+}
+
+/* Feedback section */
+.feedback-section {
+  margin-top: 1.5rem;
+}
+
+.feedback-content {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #198754;
+  line-height: 1.6;
+}
+
+/* Status badge styles */
+.badge {
+  padding: 0.5em 0.75em;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .modal-container {
+    width: 95%;
+    margin: 0 10px;
+  }
+}
