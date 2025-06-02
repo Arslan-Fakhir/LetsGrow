@@ -2,47 +2,48 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Bell, User, Settings, HelpCircle, LogOut, Menu, UserPlus, Lightbulb } from "lucide-react";
 import "./TopNavbar.css";
+import logo from "../../../assets/logo.svg"
 
 const TopNavbar = ({ toggleSidebar }) => {
-  const [notificationOpen, setNotificationOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false)
+  const [profileOpen, setProfileOpen] = useState(false)
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
-  const navigate = useNavigate();
-  const notificationRef = useRef(null);
-  const profileRef = useRef(null);
-  const logoutModalRef = useRef(null);
+  const navigate = useNavigate()
+  const notificationRef = useRef(null)
+  const profileRef = useRef(null)
+  const logoutModalRef = useRef(null)
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (notificationRef.current && !notificationRef.current.contains(event.target)) {
-        setNotificationOpen(false);
+        setNotificationOpen(false)
       }
       if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setProfileOpen(false);
+        setProfileOpen(false)
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, []);
+  }, [])
 
   const handleLogoutClick = (e) => {
-    e.preventDefault();
-    setShowLogoutConfirm(true);
-    setProfileOpen(false);
-  };
+    e.preventDefault()
+    setShowLogoutConfirm(true)
+    setProfileOpen(false)
+  }
 
   const handleLogoutConfirm = () => {
-    navigate("/login");
-    setShowLogoutConfirm(false);
-  };
+    navigate("/login")
+    setShowLogoutConfirm(false)
+  }
 
   const handleLogoutCancel = () => {
-    setShowLogoutConfirm(false);
-  };
+    setShowLogoutConfirm(false)
+  }
 
   return (
     <header className="bg-dark text-white py-2 px-3 d-flex align-items-center justify-content-between sticky-top">
@@ -54,7 +55,7 @@ const TopNavbar = ({ toggleSidebar }) => {
 
       <div className="d-flex align-items-center">
         <Link to="/" className="text-decoration-none text-white">
-          <span className="fw-bold fs-5">Let's Grow</span>
+          <img src={logo}alt="Logo" style={{ height: "32px", width: "auto" }} className="d-block" />
         </Link>
       </div>
 
@@ -182,7 +183,6 @@ const TopNavbar = ({ toggleSidebar }) => {
         </div>
       )}
     </header>
-  );
-};
-
+  )
+}
 export default TopNavbar;

@@ -1,9 +1,25 @@
 .sidebar-expanded {
   width: 250px;
+  background-color: #ffffff;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1030;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-collapsed {
   width: 80px;
+  background-color: #ffffff;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1030;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
 }
 
 @media (max-width: 767.98px) {
@@ -14,6 +30,12 @@
 
 .menu-item {
   transition: all 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 6px;
+  margin: 2px 8px;
+  padding: 8px 12px !important;
 }
 
 .menu-item:hover {
@@ -24,4 +46,116 @@
 .active-menu-item {
   background-color: #e9ecef;
   font-weight: 500;
+}
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1020;
+  display: none;
+}
+
+.sidebar-overlay.show {
+  display: block;
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+.sidebar-footer {
+  border-top: 1px solid #e9ecef;
+  padding: 1rem;
+  background-color: #ffffff;
+  margin-top: auto;
+}
+
+.sidebar-brand {
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.sidebar-search {
+  padding: 0.75rem;
+}
+
+.sidebar-search input {
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  background-color: #f8f9fa;
+}
+
+.sidebar-user-info {
+  margin-left: 0.75rem;
+  overflow: hidden;
+}
+
+.sidebar-user-name {
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-user-role {
+  color: #6c757d;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-logout {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.sidebar-logout:hover {
+  background-color: #dc3545;
+  color: #ffffff !important;
+  border-color: #dc3545;
 }

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import "./Signup.css";
-import logo from "../../assets/logo.svg";
+import logo from "../../assets/logo2.svg";
 
 function Signup() {
   const [formData, setFormData] = useState({

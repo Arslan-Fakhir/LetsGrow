@@ -1,17 +1,14 @@
-import { Link, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+"use client"
+
+import { Link, useLocation } from "react-router-dom"
+import { useState, useEffect } from "react"
 import {
   Search,
   LogOut,
   Home,
-  Lightbulb,
   FileText,
   Settings,
   PieChart,
-  TrendingUp,
-  MessageSquare,
-  Calendar,
-  Lock,
   ChevronLeft,
   ChevronRight,
   X,
@@ -20,40 +17,81 @@ import {
   Users,
   DollarSign,
   Briefcase,
-} from "lucide-react";
-import "./Sidebar.css";
+  User,
+} from "lucide-react"
+import "./Sidebar.css"
+
+const getMenuItems = (role) => {
+  const menuItems = {
+    entrepreneur: {
+      main: [
+        { name: "Dashboard", icon: Home, path: "/dashboard" },
+        { name: "My Startup", icon: Briefcase, path: "/my-startup" },
+        { name: "Settings", icon: Settings, path: "/settings" },
+      ],
+      additional: [
+        { name: "Analytics", icon: PieChart, path: "/analytics" },
+        { name: "Startup Progress", icon: Target, path: "/progress" },
+        { name: "Funding", icon: DollarSign, path: "/funding" },
+      ],
+    },
+    investor: {
+      main: [
+        { name: "Dashboard", icon: Home, path: "/dashboard" },
+        { name: "Investment Portfolio", icon: DollarSign, path: "/portfolio" },
+        { name: "Startup Discovery", icon: Target, path: "/discover" },
+        { name: "Due Diligence", icon: FileText, path: "/due-diligence" },
+        { name: "Settings", icon: Settings, path: "/settings" },
+      ],
+      additional: [{ name: "Analytics", icon: PieChart, path: "/analytics" }],
+    },
+    admin: {
+      main: [
+        { name: "Dashboard", icon: Home, path: "/dashboard" },
+        { name: "Manage Users", icon: Users, path: "/users" },
+        { name: "Manage Startups", icon: Briefcase, path: "/startups" },
+        { name: "Manage Investments", icon: DollarSign, path: "/investments" },
+        { name: "Reports", icon: FileText, path: "/reports" },
+        { name: "Settings", icon: Settings, path: "/settings" },
+      ],
+      additional: [{ name: "System Logs", icon: PieChart, path: "/logs" }],
+    },
+  }
+
+  return menuItems[role] || menuItems.entrepreneur
+}
 
 const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSidebar }) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const location = useLocation();
+  const [searchQuery, setSearchQuery] = useState("")
+  const location = useLocation()
+  const userRole = "entrepreneur"
+
+  // Mock user data - replace with actual user data from your auth system
+  const userData = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    avatar: null, // You can add avatar URL here
+  }
+
+  const { main: menuItems, additional: additionalMenuItems } = getMenuItems(userRole)
 
   useEffect(() => {
-    const path = location.pathname;
+    const path = location.pathname
     const menuItem =
-      menuItems.find((item) => item.path === path) || additionalMenuItems.find((item) => item.path === path);
+      menuItems.find((item) => item.path === path) || additionalMenuItems.find((item) => item.path === path)
 
     if (menuItem) {
-      setActiveMenuItem(menuItem.name);
+      setActiveMenuItem(menuItem.name)
     }
-  }, [location, setActiveMenuItem]);
+  }, [location, setActiveMenuItem])
 
-  const menuItems = [
-    { name: "Dashboard", icon: Home, path: "/dashboard" },
-    { name: "My Startup", icon: Briefcase, path: "/my-startup" },
-    { name: "Ideas Board", icon: Lightbulb, path: "/ideas" },
-    { name: "Team Management", icon: Users, path: "/team" },
-    { name: "Latest Updates", icon: FileText, path: "/updates" },
-    { name: "Settings", icon: Settings, path: "/settings" },
-  ];
-
-  const additionalMenuItems = [
-    { name: "Analytics", icon: PieChart, path: "/analytics" },
-    { name: "Startup Progress", icon: Target, path: "/progress" },
-    { name: "Funding", icon: DollarSign, path: "/funding" },
-    { name: "Messages", icon: MessageSquare, path: "/messages" },
-    { name: "Calendar", icon: Calendar, path: "/calendar" },
-    { name: "Security", icon: Lock, path: "/security" },
-  ];
+  const handleLogout = () => {
+    // Add your logout logic here
+    console.log("Logging out...")
+    // Example: clear tokens, redirect to login, etc.
+    // localStorage.removeItem('authToken');
+    // navigate('/login');
+  }
 
   return (
     <>
@@ -68,7 +106,7 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
 
       {sidebarExpanded && (
         <div
-          className="d-md-none position-fixed top-0 start-0 w-100 h-100 bg-dark opacity-50 z-2"
+          className="sidebar-overlay show d-md-none"
           onClick={toggleSidebar}
           role="button"
           aria-label="Close menu"
@@ -76,144 +114,139 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
         />
       )}
 
-      <aside
-        className={`position-fixed d-flex flex-column h-100 bg-white shadow transition-all ${
-          sidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"
-        }`}
-        style={{
-          width: sidebarExpanded ? "250px" : "80px",
-          left: sidebarExpanded || window.innerWidth >= 768 ? "0" : "-80px",
-          zIndex: 1030,
-          transition: "all 0.3s ease-in-out",
-        }}
-        aria-expanded={sidebarExpanded}
-      >
-        <div className="d-flex align-items-center justify-content-between p-3 border-bottom">
-          <Link to="/" className="text-decoration-none text-dark d-flex align-items-center gap-2" aria-label="Home">
-            <div style={{ width: "32px", height: "32px" }}>
-              <Briefcase size={32} className="text-success" />
-            </div>
-            {sidebarExpanded && <h1 className="fs-5 fw-bold mb-0">let's grow</h1>}
-          </Link>
-          <button
-            className="btn btn-sm btn-light d-none d-md-flex"
-            onClick={toggleSidebar}
-            aria-label={sidebarExpanded ? "Collapse sidebar" : "Expand sidebar"}
-          >
-            {sidebarExpanded ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
-          </button>
-        </div>
-
-        <div className="p-3">
-          <div className="position-relative">
-            <label htmlFor="sidebar-search" className="visually-hidden">
-              Search
-            </label>
-            <Search
-              className="position-absolute"
-              style={{
-                top: "10px",
-                left: sidebarExpanded ? "12px" : "8px",
-                color: "#6c757d",
-              }}
-              size={16}
-              aria-hidden="true"
-            />
-            <input
-              id="sidebar-search"
-              type="text"
-              placeholder={sidebarExpanded ? "Search..." : ""}
-              className="form-control"
-              style={{
-                paddingLeft: sidebarExpanded ? "35px" : "30px",
-                transition: "all 0.3s ease",
-              }}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label="Search menu items"
-            />
+      <aside className={sidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"} aria-expanded={sidebarExpanded}>
+        <div className="sidebar-content d-flex flex-column h-100">
+          <div className="d-flex align-items-center justify-content-between p-3 border-bottom">
+            <Link to="/" className="text-decoration-none text-dark d-flex align-items-center gap-2">
+              <div
+                className="d-flex align-items-center justify-content-center"
+                style={{ width: "32px", height: "32px" }}
+              >
+                <Briefcase size={24} className="text-success" />
+              </div>
+              {sidebarExpanded && <span className="fs-5 fw-bold">let's grow</span>}
+            </Link>
+            <button
+              className="btn btn-sm btn-light d-none d-md-flex"
+              onClick={toggleSidebar}
+              aria-label={sidebarExpanded ? "Collapse sidebar" : "Expand sidebar"}
+            >
+              {sidebarExpanded ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
+            </button>
           </div>
-        </div>
 
-        <nav className="mt-2 overflow-auto" aria-label="Main navigation">
-          {menuItems.map((item) => (
+          <div className="p-3">
+            <div className="position-relative">
+              <Search
+                className="position-absolute"
+                style={{
+                  top: "10px",
+                  left: sidebarExpanded ? "12px" : "8px",
+                  color: "#6c757d",
+                }}
+                size={16}
+              />
+              <input
+                type="text"
+                placeholder={sidebarExpanded ? "Search..." : ""}
+                className="form-control"
+                style={{
+                  paddingLeft: sidebarExpanded ? "35px" : "30px",
+                }}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <nav className="sidebar-nav flex-grow-1">
+            {menuItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
+                  activeMenuItem === item.name ? "active-menu-item" : ""
+                }`}
+                onClick={() => setActiveMenuItem(item.name)}
+              >
+                <div className="d-flex align-items-center gap-3">
+                  <item.icon size={20} className={activeMenuItem === item.name ? "text-success" : "text-secondary"} />
+                  {sidebarExpanded && <span>{item.name}</span>}
+                </div>
+              </Link>
+            ))}
+
+            {sidebarExpanded && <div className="px-3 py-2 mt-3 small text-muted">GROWTH & PROGRESS</div>}
+
+            {additionalMenuItems.map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
+                  activeMenuItem === item.name ? "active-menu-item" : ""
+                }`}
+                onClick={() => setActiveMenuItem(item.name)}
+              >
+                <div className="d-flex align-items-center gap-3">
+                  <item.icon size={20} className={activeMenuItem === item.name ? "text-success" : "text-secondary"} />
+                  {sidebarExpanded && <span>{item.name}</span>}
+                </div>
+              </Link>
+            ))}
+          </nav>
+
+          {/* User Profile and Logout Section */}
+          <div className="border-top mt-auto">
+            {/* Profile Section */}
             <Link
-              key={item.name}
-              to={item.path}
+              to="/profile"
               className={`btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
-                activeMenuItem === item.name ? "active-menu-item" : ""
+                activeMenuItem === "Profile" ? "active-menu-item" : ""
               }`}
-              onClick={() => setActiveMenuItem(item.name)}
-              aria-current={activeMenuItem === item.name ? "page" : undefined}
+              onClick={() => setActiveMenuItem("Profile")}
             >
               <div className="d-flex align-items-center gap-3">
-                <item.icon
-                  size={20}
-                  className={activeMenuItem === item.name ? "text-success" : "text-secondary"}
-                  aria-hidden="true"
-                />
-                {sidebarExpanded && <span>{item.name}</span>}
+                <div
+                  className="d-flex align-items-center justify-content-center bg-success text-white rounded-circle"
+                  style={{ width: "20px", height: "20px", fontSize: "12px" }}
+                >
+                  {userData.avatar ? (
+                    <img
+                      src={userData.avatar || "/placeholder.svg"}
+                      alt="Profile"
+                      className="rounded-circle"
+                      style={{ width: "20px", height: "20px" }}
+                    />
+                  ) : (
+                    <User size={12} />
+                  )}
+                </div>
+                {sidebarExpanded && (
+                  <div className="d-flex flex-column">
+                    <span className="small fw-medium">{userData.name}</span>
+                    <span className="text-muted" style={{ fontSize: "0.75rem" }}>
+                      {userData.email}
+                    </span>
+                  </div>
+                )}
               </div>
             </Link>
-          ))}
 
-          {sidebarExpanded && (
-            <div className="px-3 py-2 small text-muted" aria-hidden="true">
-              GROWTH & PROGRESS
-            </div>
-          )}
-
-          {additionalMenuItems.map((item) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              className={`btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
-                activeMenuItem === item.name ? "active-menu-item" : ""
-              }`}
-              onClick={() => setActiveMenuItem(item.name)}
-              aria-current={activeMenuItem === item.name ? "page" : undefined}
+            {/* Logout Button */}
+            <button
+              className="btn btn-link text-decoration-none text-danger w-100 text-start py-2 px-3 border-0 menu-item"
+              onClick={handleLogout}
             >
               <div className="d-flex align-items-center gap-3">
-                <item.icon
-                  size={20}
-                  className={activeMenuItem === item.name ? "text-success" : "text-secondary"}
-                  aria-hidden="true"
-                />
-                {sidebarExpanded && <span>{item.name}</span>}
+                <LogOut size={20} />
+                {sidebarExpanded && <span>Logout</span>}
               </div>
-            </Link>
-          ))}
-        </nav>
-
-        <div className="mt-auto p-3 border-top">
-          {sidebarExpanded && (
-            <div className="d-flex align-items-center mb-3">
-              <div className="rounded-circle bg-light p-1" style={{ width: "40px", height: "40px" }}>
-                <img
-                  src="https://via.placeholder.com/40"
-                  alt="Entrepreneur profile"
-                  className="rounded-circle w-100 h-100"
-                  style={{ objectFit: "cover" }}
-                />
-              </div>
-              <div className="ms-2">
-                <div className="fw-medium">John Doe</div>
-                <div className="text-muted small">Entrepreneur</div>
-              </div>
-            </div>
-          )}
-
-          <Link
-            to="/logout"
-            className="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2 menu-item"
-          >
-            <LogOut size={18} aria-hidden="true" />
-            {sidebarExpanded && <span>Log Out</span>}
-          </Link>
+            </button>
+          </div>
         </div>
       </aside>
     </>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar
