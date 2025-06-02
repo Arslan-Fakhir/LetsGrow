@@ -1,22 +1,23 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Navbar as BootstrapNavbar, Nav, Container } from "react-bootstrap";
-import "./Navbar.css"; // Import the CSS file
+import "./Navbar.css";
 import logo from "../assets/logo.svg";
 
 function Navbar() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <BootstrapNavbar expanded={expanded} expand="md" className="navbar-custom">
+    <BootstrapNavbar expanded={expanded} expand="md" className="custom-navbar">
       <Container>
-        <BootstrapNavbar.Brand as={Link} to="/" className="brand-container">
+        <BootstrapNavbar.Brand as={Link} to="/" className="navbar-brand-custom">
           {/* <img src={logo} alt="Let's Grow" height="20" className="" /> */}
         </BootstrapNavbar.Brand>
 
         <BootstrapNavbar.Toggle
           aria-controls="basic-navbar-nav"
           onClick={() => setExpanded(!expanded)}
+          className="navbar-toggler-custom"
         />
 
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
@@ -56,7 +57,7 @@ function Navbar() {
             <Nav.Link
               as={Link}
               to="/signup"
-              className="btn-custom ms-md-2 btn-signup"
+              className="btn-signup-custom"
               onClick={() => setExpanded(false)}
             >
               Signup
@@ -65,7 +66,7 @@ function Navbar() {
             <Nav.Link
               as={Link}
               to="/login"
-              className="btn-custom ms-md-2 btn-login"
+              className="btn-login-custom"
               onClick={() => setExpanded(false)}
             >
               Login

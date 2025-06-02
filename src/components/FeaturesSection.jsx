@@ -6,8 +6,7 @@ import "./FeaturesSection.css";
 const features = [
   {
     title: "Innovation",
-    description:
-      "Cutting-edge solutions that keep you ahead of the competition",
+    description: "Cutting-edge solutions that keep you ahead of the competition",
     icon: "🚀",
   },
   {
@@ -24,7 +23,7 @@ const features = [
 
 const FeaturesSection = () => {
   return (
-    <section className="features-section">
+    <section className="py-5 bg-light">
       <Container>
         <SectionHeader
           title="Our Features"
@@ -33,10 +32,10 @@ const FeaturesSection = () => {
         <Row>
           {features.map((feature, index) => (
             <Col key={index} md={4} className="mb-4">
-              <Card className="feature-card">
+              <Card className="h-100 border-0 shadow-sm">
                 <Card.Body className="text-center">
-                  <div className="feature-icon">{feature.icon}</div>
-                  <Card.Title className="feature-title">
+                  <div className="display-4 mb-3">{feature.icon}</div>
+                  <Card.Title className="fw-bold mb-3">
                     {feature.title}
                   </Card.Title>
                   <Card.Text className="text-muted">

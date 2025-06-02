@@ -1,5 +1,6 @@
 import React from "react";
 import { FaMoneyBillWave, FaCalendarAlt, FaRocket } from "react-icons/fa";
+import "./Transaction.css";
 
 const transactions = [
   {
@@ -26,47 +27,46 @@ const transactions = [
     date: "2024-01-20",
     amount: 280000,
   },
-  
 ];
 
 const Transaction = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="transaction-container">
+      <div className="container py-5">
         {/* Hero */}
-        <div className="text-center mb-12">
-          <FaRocket className="text-green-600 text-5xl mx-auto mb-4" />
-          <h1 className="text-4xl font-extrabold text-gray-800 mb-2">
+        <div className="text-center mb-5">
+          <FaRocket className="transaction-icon mb-3" />
+          <h1 className="transaction-title mb-2">
             Transaction History
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="transaction-subtitle">
             A quick overview of your startup funding activity
           </p>
         </div>
 
         {/* Transaction Cards */}
-        <div className="flex flex-col  justify-center gap-8">
+        <div className="transaction-cards-container">
           {transactions.map((tx, idx) => (
             <div
               key={idx}
-              className="w-full md:w-full bg-white shadow-xl rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.01]"
+              className="transaction-card"
             >
-              <div className="flex justify-between items-start mb-4">
+              <div className="d-flex justify-content-between align-items-start mb-3">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-800">
+                  <h2 className="transaction-startup">
                     {tx.startup}
                   </h2>
-                  <p className="text-gray-500">{tx.name}</p>
+                  <p className="transaction-name">{tx.name}</p>
                 </div>
-                <FaRocket className="text-green-500 text-xl" />
+                <FaRocket className="transaction-rocket" />
               </div>
-              <div className="flex justify-between items-center mt-4">
-                <div className="flex items-center space-x-2 text-gray-500">
-                  <FaCalendarAlt />
-                  <span className="text-sm">{tx.date}</span>
+              <div className="d-flex justify-content-between align-items-center mt-3">
+                <div className="d-flex align-items-center transaction-date">
+                  <FaCalendarAlt className="me-2" />
+                  <span>{tx.date}</span>
                 </div>
-                <div className="flex items-center space-x-2 text-green-600 text-xl font-bold">
-                  <FaMoneyBillWave />
+                <div className="d-flex align-items-center transaction-amount">
+                  <FaMoneyBillWave className="me-2" />
                   <span>{tx.amount.toLocaleString()} RS</span>
                 </div>
               </div>
