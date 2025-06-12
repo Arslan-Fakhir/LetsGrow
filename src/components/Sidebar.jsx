@@ -1,7 +1,7 @@
 "use client"
 
-import { Link } from "react-router-dom"
 import { useState } from "react"
+import { NavLink, Link } from "react-router-dom"
 import {
   Search,
   LogOut,
@@ -23,9 +23,10 @@ import {
 } from "lucide-react"
 import "./Sidebar.css"
 
-const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSidebar }) => {
+const Sidebar = ({ sidebarExpanded, toggleSidebar }) => {
   const [searchQuery, setSearchQuery] = useState("")
 
+  // Menu items configuration
   const menuItems = [
     { name: "Dashboard", icon: Home, path: "/dashboard" },
     { name: "Manage Ideas", icon: Lightbulb, path: "/manage-ideas" },
@@ -137,24 +138,26 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
 
         <nav className="mt-2 overflow-auto" aria-label="Main navigation">
           {menuItems.map((item) => (
-            <Link
+            <NavLink
               key={item.name}
               to={item.path}
-              className={`btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
-                activeMenuItem === item.name ? "active-menu-item" : ""
-              }`}
-              onClick={() => setActiveMenuItem(item.name, item.path)}
-              aria-current={activeMenuItem === item.name ? "page" : undefined}
+              className={({ isActive }) => 
+                `btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
+                  isActive ? 'active-menu-item' : ''
+                }`
+              }
             >
-              <div className="d-flex align-items-center gap-3">
-                <item.icon
-                  size={20}
-                  className={activeMenuItem === item.name ? "text-success" : "text-secondary"}
-                  aria-hidden="true"
-                />
-                {sidebarExpanded && <span>{item.name}</span>}
-              </div>
-            </Link>
+              {({ isActive }) => (
+                <div className="d-flex align-items-center gap-3">
+                  <item.icon
+                    size={20}
+                    className={isActive ? "text-success" : "text-secondary"}
+                    aria-hidden="true"
+                  />
+                  {sidebarExpanded && <span>{item.name}</span>}
+                </div>
+              )}
+            </NavLink>
           ))}
 
           {sidebarExpanded && (
@@ -164,24 +167,26 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
           )}
 
           {additionalMenuItems.map((item) => (
-            <Link
+            <NavLink
               key={item.name}
               to={item.path}
-              className={`btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
-                activeMenuItem === item.name ? "active-menu-item" : ""
-              }`}
-              onClick={() => setActiveMenuItem(item.name, item.path)}
-              aria-current={activeMenuItem === item.name ? "page" : undefined}
+              className={({ isActive }) => 
+                `btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
+                  isActive ? 'active-menu-item' : ''
+                }`
+              }
             >
-              <div className="d-flex align-items-center gap-3">
-                <item.icon
-                  size={20}
-                  className={activeMenuItem === item.name ? "text-success" : "text-secondary"}
-                  aria-hidden="true"
-                />
-                {sidebarExpanded && <span>{item.name}</span>}
-              </div>
-            </Link>
+              {({ isActive }) => (
+                <div className="d-flex align-items-center gap-3">
+                  <item.icon
+                    size={20}
+                    className={isActive ? "text-success" : "text-secondary"}
+                    aria-hidden="true"
+                  />
+                  {sidebarExpanded && <span>{item.name}</span>}
+                </div>
+              )}
+            </NavLink>
           ))}
         </nav>
 
@@ -191,7 +196,7 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
               <div className="rounded-circle bg-light p-1" style={{ width: "40px", height: "40px" }}>
                 <img
                   src="/placeholder-user.jpg"
-                  alt="Admin profile"
+                  alt="User profile"
                   className="rounded-circle w-100 h-100"
                   style={{ objectFit: "cover" }}
                   onError={(e) => {
@@ -206,17 +211,21 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
             </div>
           )}
 
-          <Link
+          <NavLink
             to="/logout"
-            className="btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2 menu-item"
+            className={({ isActive }) => 
+              `btn btn-outline-secondary w-100 d-flex align-items-center justify-content-center gap-2 menu-item ${
+                isActive ? 'active-menu-item' : ''
+              }`
+            }
           >
             <LogOut size={18} aria-hidden="true" />
             {sidebarExpanded && <span>Log Out</span>}
-          </Link>
+          </NavLink>
         </div>
       </aside>
     </>
   )
 }
 
-export default Sidebar;
+export default Sidebar

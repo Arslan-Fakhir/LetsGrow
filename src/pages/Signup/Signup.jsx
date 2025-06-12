@@ -1,31 +1,102 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
+import { useAuth } from "../../context/AuthContext";
+import { toast } from 'react-toastify';
 import "./Signup.css";
 import logo from "../../assets/logo2.svg";
 
 function Signup() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    userType: "entrepreneur",
-  });
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [role, setRole] = useState("entrepreneur");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle signup logic here
-    console.log("Signup attempt:", formData);
+    
+    if (!name || !email || !password || !otp) {
+      toast.error("All fields are required!");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          name, 
+          email, 
+          password, 
+          otp, 
+          role: role === "entrepreneur" ? "entrepreneur" : "investor" 
+        }),
+        credentials: 'include'
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success('Registration successful');
+        login({ 
+          email, 
+          role: data.role || role,
+          userId: data.userId 
+        });
+        navigate(data.role === 'investor' ? '/investor-dashboard' : data.role === 'admin' ? '/admin-dashboard' : '/dashboard');
+      } else {
+        toast.error(data.message || 'Registration failed');
+      }
+    } catch (error) {
+      toast.error('Error during registration');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const handleSendOtp = async () => {
+  if (!email) {
+    toast.error('Please enter your email');
+    return;
+  }
+
+  try {
+    setLoading(true);
+    
+    // Add fallback URL if env var isn't set
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+    
+    const response = await fetch(`${API_BASE_URL}/auth/sendotp`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+      credentials: 'include'
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to send OTP');
+    }
+
+    const data = await response.json();
+    toast.success(data.message || 'OTP sent successfully');
+  } catch (error) {
+    console.error('OTP Error:', error);
+    toast.error(error.message || 'Error sending OTP');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <Container className="py-5">
@@ -41,12 +112,11 @@ function Signup() {
 
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Name</Form.Label>
+                  <Form.Label>Full Name</Form.Label>
                   <Form.Control
                     type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your name"
                     required
                   />
@@ -54,12 +124,32 @@ function Signup() {
 
                 <Form.Group className="mb-3">
                   <Form.Label>Email address</Form.Label>
+                  <div className="d-flex">
+                    <Form.Control
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      required
+                    />
+                    <Button 
+                      variant="outline-primary" 
+                      className="ms-2"
+                      onClick={handleSendOtp}
+                      disabled={loading || !email}
+                    >
+                      {loading ? 'Sending...' : 'Get OTP'}
+                    </Button>
+                  </div>
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label>OTP Verification</Form.Label>
                   <Form.Control
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder="Enter your email"
+                    type="text"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    placeholder="Enter the OTP sent to your email"
                     required
                   />
                 </Form.Group>
@@ -68,48 +158,32 @@ function Signup() {
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Create a password"
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
-                  <Form.Label>Confirm Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    placeholder="Confirm your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Create a password (min 6 characters)"
+                    minLength="6"
                     required
                   />
                 </Form.Group>
 
                 <Form.Group className="mb-4">
-                  <Form.Label>Who are you?</Form.Label>
-                  <div className="user-type-container">
+                  <Form.Label>Account Type</Form.Label>
+                  <div>
                     <Form.Check
                       inline
                       type="radio"
-                      name="userType"
                       id="entrepreneur"
-                      value="entrepreneur"
                       label="Entrepreneur"
-                      checked={formData.userType === "entrepreneur"}
-                      onChange={handleChange}
+                      checked={role === "entrepreneur"}
+                      onChange={() => setRole("entrepreneur")}
                     />
                     <Form.Check
                       inline
                       type="radio"
-                      name="userType"
                       id="investor"
-                      value="investor"
                       label="Investor"
-                      checked={formData.userType === "investor"}
-                      onChange={handleChange}
+                      checked={role === "investor"}
+                      onChange={() => setRole("investor")}
                     />
                   </div>
                 </Form.Group>
@@ -117,8 +191,9 @@ function Signup() {
                 <Button
                   type="submit"
                   className="signup-button btn-custom w-100"
+                  disabled={loading}
                 >
-                  Register
+                  {loading ? 'Signing up...' : 'Sign Up'}
                 </Button>
 
                 <p className="text-center mt-4 mb-0">

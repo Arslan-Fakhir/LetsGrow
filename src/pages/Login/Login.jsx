@@ -1,30 +1,66 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Card, Alert } from "react-bootstrap";
+import { useAuth } from "../../context/AuthContext";
+import { toast } from 'react-toastify';
 import "./Login.css";
+import logo from "../../assets/logo2.svg"
 
 function Login() {
+  const { login } = useAuth();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log("Login attempt:", formData);
-    // Redirect to dashboard after successful login
-    //navigate("/dashboard");
+    
+    if (!email || !password) {
+      toast.error("Email and Password are required!");
+      return;
+    }
 
-  };
+    try {
+      setLoading(true);
+      
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include'
+      });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success('Logged in successfully');
+        login(data.data); // Update auth context with user data
+        
+        // Redirect based on user role or to dashboard
+        let redirectPath = '/dashboard'; // Default
+        switch(data.role) {
+  case 'investor':
+    redirectPath = '/investor-dashboard';
+    break;
+  case 'admin':
+    redirectPath = '/admin';
+    break;
+  case 'entrepreneur':
+    redirectPath = '/dashboard';
+    break;
+}
+navigate(redirectPath);
+      } else {
+        toast.error(data.message || 'Login failed');
+      }
+    } catch (error) {
+      toast.error('An error occurred during login');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,7 +71,7 @@ function Login() {
             <Card.Body className="p-4">
               <div className="text-center mb-4">
                 <img
-                  src="/logo.svg"
+                  src={logo}
                   alt="Let's Grow"
                   height="40"
                   className="mb-3"
@@ -49,9 +85,8 @@ function Login() {
                   <Form.Label>Email address</Form.Label>
                   <Form.Control
                     type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
                     required
                   />
@@ -61,9 +96,8 @@ function Login() {
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     type="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
                     required
                   />
@@ -77,8 +111,12 @@ function Login() {
                   </div>
                 </Form.Group>
 
-                <Button type="submit" className="login-button btn-custom w-100">
-                  Login
+                <Button 
+                  type="submit" 
+                  className="login-button btn-custom w-100"
+                  disabled={loading}
+                >
+                  {loading ? 'Logging in...' : 'Login'}
                 </Button>
 
                 <p className="text-center mt-4 mb-0">
