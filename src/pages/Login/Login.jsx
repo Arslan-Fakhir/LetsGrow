@@ -1,61 +1,64 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, Row, Col, Form, Button, Card, Alert } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from 'react-toastify';
 import "./Login.css";
-import logo from "../../assets/logo2.svg"
+import logo from "../../assets/logo2.svg";
 
-function Login() {
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!email || !password) {
       toast.error("Email and Password are required!");
       return;
     }
 
+    setLoading(true);
+
     try {
-      setLoading(true);
-      
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
-        credentials: 'include'
+        credentials: 'include',
       });
 
       const data = await response.json();
+      console.log("Login response data:", data); // For debugging
 
       if (response.ok) {
+        const user = data.data.user;
         toast.success('Logged in successfully');
-        login(data.data); // Update auth context with user data
-        
-        // Redirect based on user role or to dashboard
-        let redirectPath = '/dashboard'; // Default
-        switch(data.role) {
-  case 'investor':
-    redirectPath = '/investor-dashboard';
-    break;
-  case 'admin':
-    redirectPath = '/admin';
-    break;
-  case 'entrepreneur':
-    redirectPath = '/dashboard';
-    break;
-}
-navigate(redirectPath);
+        toast.info(`You are logged in as ${user.role}`);
+
+        // Store user in context (adjust this line if you store tokens too)
+        login(user);
+
+        // Role-based redirection
+        if (user.role === 'entrepreneur') {
+          navigate('/dashboard');
+        } else if (user.role === 'investor') {
+          navigate('/investor-dashboard');
+        } else if (user.role === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
+
       } else {
         toast.error(data.message || 'Login failed');
       }
+
     } catch (error) {
       toast.error('An error occurred during login');
     } finally {
@@ -70,12 +73,7 @@ navigate(redirectPath);
           <Card className="login-card border-0 shadow-sm">
             <Card.Body className="p-4">
               <div className="text-center mb-4">
-                <img
-                  src={logo}
-                  alt="Let's Grow"
-                  height="40"
-                  className="mb-3"
-                />
+                <img src={logo} alt="Let's Grow" height="40" className="mb-3" />
                 <h2 className="fw-bold">Welcome back</h2>
                 <p className="text-muted">Please enter your details</p>
               </div>
@@ -102,10 +100,7 @@ navigate(redirectPath);
                     required
                   />
                   <div className="text-end mt-2">
-                    <Link
-                      to="/forgot-password"
-                      className="forgot-password-link text-custom text-decoration-none small"
-                    >
+                    <Link to="/forgot-password" className="forgot-password-link text-custom text-decoration-none small">
                       Forgot Password?
                     </Link>
                   </div>
@@ -121,10 +116,7 @@ navigate(redirectPath);
 
                 <p className="text-center mt-4 mb-0">
                   Don't have an account?{" "}
-                  <Link
-                    to="/signup"
-                    className="signup-link text-custom text-decoration-none"
-                  >
+                  <Link to="/signup" className="signup-link text-custom text-decoration-none">
                     Sign up
                   </Link>
                 </p>
@@ -135,6 +127,6 @@ navigate(redirectPath);
       </Row>
     </Container>
   );
-}
+};
 
 export default Login;

@@ -7,7 +7,7 @@ import TopNavbar from "./components/EntrepreneurDashboardComponents/TopNavbar/To
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import EntrepreneurDashboard from "./pages/Dashboard/EntrepreneurDashboard";
-import Role from "./pages/RoleSelection/RoleSelection";
+//import Role from "./pages/RoleSelection/RoleSelection";
 import StartupForm from "./components/EntrepreneurDashboardComponents/forms/StartupForm";
 import ManpowerForm from "./components/EntrepreneurDashboardComponents/forms/ManpowerForm";
 import FundingForm from "./components/EntrepreneurDashboardComponents/forms/FundingForm";
@@ -30,7 +30,7 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_API_BASE_URL}/auth/checklogin`, {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/checklogin`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -51,7 +51,7 @@ const ProtectedRoute = ({ children }) => {
       }
     };
     checkLoginStatus();
-  }, [navigate, login]);
+  }, [navigate]);
 
   if (loading) {
     return <div className="loading-spinner">Loading...</div>;
@@ -121,7 +121,7 @@ function App() {
                 sidebarExpanded={sidebarExpanded}
               >
                 <Routes>
-                  <Route index element={<Role />} />
+                  {/*<Route index element={<Role />} />*/}
                   <Route path="/dashboard" element={<EntrepreneurDashboard />} />
                   <Route path="/apply-startup" element={<StartupForm />} />
                   <Route path="/request-manpower" element={<ManpowerForm />} />
