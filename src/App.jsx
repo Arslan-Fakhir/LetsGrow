@@ -7,10 +7,8 @@ import TopNavbar from "./components/EntrepreneurDashboardComponents/TopNavbar/To
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import EntrepreneurDashboard from "./pages/Dashboard/EntrepreneurDashboard";
-//import Role from "./pages/RoleSelection/RoleSelection";
 import StartupForm from "./components/EntrepreneurDashboardComponents/forms/StartupForm";
 import ManpowerForm from "./components/EntrepreneurDashboardComponents/forms/ManpowerForm";
-import FundingForm from "./components/EntrepreneurDashboardComponents/forms/FundingForm";
 import InvestorDashboard from "./pages/InvestorDashboard/InvestorDashboard";
 import Transaction from "./pages/InvestorDashboard/Transaction";
 import BrowseStartups from "./pages/InvestorDashboard/BrowseStartups";
@@ -118,14 +116,12 @@ function App() {
             <ProtectedRoute>
               <MainLayout 
                 toggleSidebar={toggleSidebar} 
-                sidebarExpanded={sidebarExpanded}
+                sidebarExpanded={(!sidebarExpanded)}
               >
                 <Routes>
-                  {/*<Route index element={<Role />} />*/}
                   <Route path="/dashboard" element={<EntrepreneurDashboard />} />
                   <Route path="/apply-startup" element={<StartupForm />} />
                   <Route path="/request-manpower" element={<ManpowerForm />} />
-                  <Route path="/apply-funding" element={<FundingForm />} />
                   <Route path="/investor-dashboard" element={<InvestorDashboard />} />
                   <Route path="/transaction" element={<Transaction />} />
                   <Route path="/browse" element={<BrowseStartups />} />

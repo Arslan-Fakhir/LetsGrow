@@ -1,9 +1,0 @@
-/* Custom hover effects */
-.hover-light:hover {
-  color: #adb5bd !important;
-}
-
-/* Custom transitions for smoother hover effects */
-.footer-link-transition {
-  transition: color 0.3s ease;
-}

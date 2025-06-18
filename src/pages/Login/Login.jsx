@@ -39,7 +39,7 @@ const Login = () => {
       if (response.ok) {
         const user = data.data.user;
         toast.success('Logged in successfully');
-        toast.info(`You are logged in as ${user.role}`);
+       // toast.info(`You are logged in as ${user.role}`);
 
         // Store user in context (adjust this line if you store tokens too)
         login(user);

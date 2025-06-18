@@ -1,9 +1,0 @@
-/* Custom styles that can't be achieved with Bootstrap utilities */
-.feature-card-hover {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card-hover:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-}
