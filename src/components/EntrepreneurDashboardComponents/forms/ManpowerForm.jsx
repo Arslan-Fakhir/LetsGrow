@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Check, Loader2 } from 'lucide-react';
+import { toast } from 'react-toastify';
 import './ManpowerForm.css';
 
 const ManpowerForm = () => {
@@ -18,24 +19,48 @@ const ManpowerForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const { position, requirements, count, timeline, employmentType, location } = formData;
+
+    if (!position || !requirements || !count || !timeline || !employmentType || !location) {
+      toast.error("All fields are required!");
+      return;
+    }
+
     setIsSubmitting(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Manpower form submitted:', formData);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/manpower/sendForm`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+        credentials: "include", // needed if your backend uses cookies
+      });
+
+      const data = await response.json();
+      console.log("Manpower form response:", data);
+
+      if (response.ok) {
+        toast.success("Submitted successfully!");
+        setIsSuccess(true);
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
+      } else {
+        toast.error(data.message || "Submission failed");
+      }
+    } catch (error) {
+      console.error("Submit Error:", error);
+      toast.error("An error occurred while submitting");
+    } finally {
       setIsSubmitting(false);
-      setIsSuccess(true);
-      
-      // Navigate after showing success animation
-      setTimeout(() => {
-        navigate('/dashboard'); // Updated to navigate to dashboard
-      }, 2000);
-    }, 1500);
+    }
   };
 
   return (
@@ -46,7 +71,7 @@ const ManpowerForm = () => {
             <div className="card shadow-sm">
               <div className="card-body p-4">
                 {isSuccess ? (
-                  <div className="success-animation">
+                  <div className="success-animation text-center">
                     <div className="success-icon-container">
                       <div className="success-icon success">
                         <Check size={32} className="check-icon" />
@@ -62,7 +87,7 @@ const ManpowerForm = () => {
                   <>
                     <div className="d-flex align-items-center mb-4">
                       <button 
-                        onClick={() => navigate('/dashboard')} // Updated to navigate to dashboard
+                        onClick={() => navigate('/dashboard')} 
                         className="btn btn-link text-decoration-none p-0 me-3"
                         disabled={isSubmitting}
                       >
@@ -169,7 +194,7 @@ const ManpowerForm = () => {
                       <div className="d-flex justify-content-end gap-2">
                         <button
                           type="button"
-                          onClick={() => navigate('/dashboard')} // Updated to navigate to dashboard
+                          onClick={() => navigate('/dashboard')}
                           className="btn btn-light"
                           disabled={isSubmitting}
                         >
