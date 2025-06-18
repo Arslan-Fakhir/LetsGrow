@@ -6,7 +6,7 @@ import './StartupForm.css';
 const StartupForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    companyName: '',
+    startupName: '',
     description: '',
     industry: '',
     stage: 'idea',
@@ -71,13 +71,13 @@ const StartupForm = () => {
 
                     <form onSubmit={handleSubmit}>
                       <div className="mb-3">
-                        <label htmlFor="companyName" className="form-label">Company Name</label>
+                        <label htmlFor="startupName" className="form-label">Startup Name</label>
                         <input
                           type="text"
                           className="form-control"
-                          id="companyName"
-                          name="companyName"
-                          value={formData.companyName}
+                          id="startupName"
+                          name="startupName"
+                          value={formData.startupName}
                           onChange={handleChange}
                           required
                           disabled={isSubmitting}
