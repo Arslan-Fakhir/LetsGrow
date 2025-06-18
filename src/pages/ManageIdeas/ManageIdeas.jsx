@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import IdeaList from "../../components/Manage_Ideas/IdeaList/IdeaList"
 import IdeaDetailsModal from "../../components/Manage_Ideas/IdeaDetailsModal/IdeaDetailsModal"
 import FeedbackModal from "../../components/Manage_Ideas/FeedbackModal/FeedbackModal"
@@ -10,116 +10,61 @@ import FilterTabs from "../../components/Manage_Ideas/FilterTabs/FilterTabs"
 import { Save } from "lucide-react"
 import "./ManageIdeas.css"
 
-// Mock data for startup ideas
-const initialStartupIdeas = [
-  {
-    id: 1,
-    title: "Aqua Pure",
-    entrepreneur: "Farhan Ahmed",
-    email: "farhan@example.com",
-    contact: "+92 300 1234567",
-    date: "November 2, 2024",
-    industry: "Clean Technology",
-    subject: "Water Purification Solution",
-    description:
-      "Affordable water purification system for rural areas using solar power and advanced filtration technology.",
-    attachments: ["business_plan.pdf", "prototype_image.jpg"],
-    status: "pending",
-    feedback: "",
-  },
-  {
-    id: 2,
-    title: "UrbanGrow",
-    entrepreneur: "Kamran Khan",
-    email: "kamran@example.com",
-    contact: "+92 321 9876543",
-    date: "June 12, 2023",
-    industry: "Agriculture",
-    subject: "Urban Vertical Farming",
-    description:
-      "Vertical farming solution for urban areas to grow organic vegetables using hydroponics and IoT monitoring.",
-    attachments: ["financial_projection.xlsx", "demo_video.mp4"],
-    status: "approved",
-    feedback: "Great concept with solid market potential. Approved for investor review.",
-  },
-  {
-    id: 3,
-    title: "Med Care",
-    entrepreneur: "Abdul Basit",
-    email: "basit@example.com",
-    contact: "+92 333 5556677",
-    date: "January 12, 2022",
-    industry: "Healthcare",
-    subject: "Mobile Healthcare Platform",
-    description:
-      "Mobile application connecting patients with doctors for remote consultations and prescription delivery.",
-    attachments: ["app_mockups.pdf", "market_research.pdf"],
-    status: "rejected",
-    feedback: "Similar solutions already exist in the market. Need more differentiation and unique value proposition.",
-  },
-  {
-    id: 4,
-    title: "EcoPackage",
-    entrepreneur: "Ayesha Malik",
-    email: "ayesha@example.com",
-    contact: "+92 311 2223344",
-    date: "March 15, 2024",
-    industry: "Sustainability",
-    subject: "Biodegradable Packaging",
-    description: "Eco-friendly packaging solutions made from agricultural waste that decompose within 30 days.",
-    attachments: ["product_samples.jpg", "patent_application.pdf"],
-    status: "pending",
-    feedback: "",
-  },
-  {
-    id: 5,
-    title: "FinLit",
-    entrepreneur: "Usman Ali",
-    email: "usman@example.com",
-    contact: "+92 345 8889900",
-    date: "April 5, 2024",
-    industry: "Education",
-    subject: "Financial Literacy Platform",
-    description:
-      "Interactive platform teaching financial literacy to young adults through gamification and real-world scenarios.",
-    attachments: ["platform_demo.mp4", "curriculum_outline.pdf"],
-    status: "pending",
-    feedback: "",
-  },
-]
+const baseURL = import.meta.env.VITE_API_BASE_URL
 
 const ManageIdeas = () => {
-  const [startupIdeas, setStartupIdeas] = useState(initialStartupIdeas)
+  const [startupIdeas, setStartupIdeas] = useState([])
   const [searchQuery, setSearchQuery] = useState("")
+  const [filterStatus, setFilterStatus] = useState("all")
   const [selectedIdea, setSelectedIdea] = useState(null)
-  const [showDetailsModal, setShowDetailsModal] = useState(false)
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false)
   const [actionType, setActionType] = useState("")
   const [feedback, setFeedback] = useState("")
-  const [filterStatus, setFilterStatus] = useState("all")
+  const [showDetailsModal, setShowDetailsModal] = useState(false)
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [ideaToDelete, setIdeaToDelete] = useState(null)
   const [hasChanges, setHasChanges] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(null)
 
-  // Filter ideas based on search query and status
+  // Fetch all startup ideas
+  const fetchIdeas = async () => {
+    try {
+      setIsLoading(true)
+      setError(null)
+      const res = await fetch(`${baseURL}/api/startups/getIdeas`)
+      if (!res.ok) throw new Error("Failed to fetch ideas")
+      const data = await res.json()
+      setStartupIdeas(data)
+    } catch (err) {
+      setError("Error fetching ideas. Please try again.")
+      console.error("Error fetching ideas:", err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchIdeas()
+  }, [])
+
+  // Filter ideas based on search and status
   const filteredIdeas = startupIdeas.filter((idea) => {
     const matchesSearch =
-      idea.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      idea.entrepreneur.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      idea.industry.toLowerCase().includes(searchQuery.toLowerCase())
-
-    if (filterStatus === "all") return matchesSearch
-    return matchesSearch && idea.status === filterStatus
+      idea.startupName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      idea.industry.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      idea.description.toLowerCase().includes(searchQuery.toLowerCase())
+    return filterStatus === "all" ? matchesSearch : matchesSearch && idea.status === filterStatus
   })
 
-  // Handle view details
+  // View idea details modal
   const handleViewDetails = (idea) => {
     setSelectedIdea(idea)
     setShowDetailsModal(true)
   }
 
-  // Handle action (approve/reject)
+  // Approve or reject
   const handleAction = (idea, action) => {
     setSelectedIdea(idea)
     setActionType(action)
@@ -127,57 +72,58 @@ const ManageIdeas = () => {
     setShowFeedbackModal(true)
   }
 
-  // Submit feedback and update status
-  const handleFeedbackSubmit = () => {
-    const updatedIdeas = startupIdeas.map((idea) => {
-      if (idea.id === selectedIdea.id) {
-        return {
-          ...idea,
-          status: actionType === "approve" ? "approved" : "rejected",
-          feedback: feedback,
-        }
-      }
-      return idea
-    })
+  // Submit feedback with status update
+  const handleFeedbackSubmit = async () => {
+    try {
+      const updatedStatus = actionType === "approve" ? "approved" : "rejected"
+      const res = await fetch(`${baseURL}/api/startups/${selectedIdea._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: updatedStatus, feedback }),
+      })
 
-    setStartupIdeas(updatedIdeas)
-    setShowFeedbackModal(false)
-    setHasChanges(true)
+      if (!res.ok) throw new Error("Failed to update startup")
 
-    // In a real application, you would send a notification to the entrepreneur here
-    console.log(`Notification sent to ${selectedIdea.entrepreneur} about ${actionType} status`)
+      setShowFeedbackModal(false)
+      setHasChanges(true)
+      await fetchIdeas()
+    } catch (err) {
+      console.error("Failed to update idea status", err)
+      alert("Failed to update idea. Try again.")
+    }
   }
 
-  // Handle delete confirmation
+  // Open delete confirm
   const handleDeleteConfirm = (idea) => {
     setIdeaToDelete(idea)
     setShowDeleteConfirm(true)
   }
 
   // Delete idea
-  const handleDelete = () => {
-    const updatedIdeas = startupIdeas.filter((idea) => idea.id !== ideaToDelete.id)
-    setStartupIdeas(updatedIdeas)
-    setShowDeleteConfirm(false)
-    setHasChanges(true)
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`${baseURL}/api/startups/${ideaToDelete._id}`, {
+        method: "DELETE",
+      })
+
+      if (!res.ok) throw new Error("Failed to delete startup")
+
+      setShowDeleteConfirm(false)
+      setHasChanges(true)
+      await fetchIdeas()
+    } catch (err) {
+      console.error("Failed to delete idea", err)
+      alert("Failed to delete idea. Try again.")
+    }
   }
 
-  // Save changes
+  // Save all changes (visual feedback only)
   const handleSaveChanges = () => {
-    // In a real application, you would save changes to a database here
-    console.log("Saving changes to startup ideas:", startupIdeas)
-
-    // Show success message
     setSaveSuccess(true)
     setHasChanges(false)
-
-    // Hide success message after 3 seconds
-    setTimeout(() => {
-      setSaveSuccess(false)
-    }, 3000)
+    setTimeout(() => setSaveSuccess(false), 3000)
   }
 
-  // Count ideas by status
   const pendingCount = startupIdeas.filter((idea) => idea.status === "pending").length
   const approvedCount = startupIdeas.filter((idea) => idea.status === "approved").length
   const rejectedCount = startupIdeas.filter((idea) => idea.status === "rejected").length
@@ -191,10 +137,10 @@ const ManageIdeas = () => {
         </div>
       </div>
 
-      {/* Search Bar */}
+      {error && <div className="alert alert-danger">{error}</div>}
+
       <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
-      {/* Filter Tabs */}
       <FilterTabs
         filterStatus={filterStatus}
         setFilterStatus={setFilterStatus}
@@ -204,15 +150,17 @@ const ManageIdeas = () => {
         totalCount={startupIdeas.length}
       />
 
-      {/* Ideas List */}
-      <IdeaList
-        filteredIdeas={filteredIdeas}
-        handleViewDetails={handleViewDetails}
-        handleAction={handleAction}
-        handleDeleteConfirm={handleDeleteConfirm}
-      />
+      {isLoading ? (
+        <p className="text-center mt-4">Loading ideas...</p>
+      ) : (
+        <IdeaList
+          filteredIdeas={filteredIdeas}
+          handleViewDetails={handleViewDetails}
+          handleAction={handleAction}
+          handleDeleteConfirm={handleDeleteConfirm}
+        />
+      )}
 
-      {/* Save Changes Button */}
       {hasChanges && (
         <div className="d-flex justify-content-end mt-4">
           <button className="btn btn-success d-flex align-items-center gap-2" onClick={handleSaveChanges}>
@@ -222,16 +170,15 @@ const ManageIdeas = () => {
         </div>
       )}
 
-      {/* Success Message */}
       {saveSuccess && (
-        <div className="save-success-message">
+        <div className="save-success-message mt-3">
           <div className="alert alert-success d-flex align-items-center" role="alert">
             <div>Changes saved successfully!</div>
           </div>
         </div>
       )}
 
-      {/* View Details Modal */}
+      {/* Modals */}
       <IdeaDetailsModal
         showDetailsModal={showDetailsModal}
         selectedIdea={selectedIdea}
@@ -239,7 +186,6 @@ const ManageIdeas = () => {
         handleAction={handleAction}
       />
 
-      {/* Feedback Modal */}
       <FeedbackModal
         showFeedbackModal={showFeedbackModal}
         selectedIdea={selectedIdea}
@@ -250,7 +196,6 @@ const ManageIdeas = () => {
         handleFeedbackSubmit={handleFeedbackSubmit}
       />
 
-      {/* Delete Confirmation Modal */}
       <DeleteConfirmModal
         showDeleteConfirm={showDeleteConfirm}
         ideaToDelete={ideaToDelete}
@@ -261,4 +206,4 @@ const ManageIdeas = () => {
   )
 }
 
-export default ManageIdeas;
+export default ManageIdeas

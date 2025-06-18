@@ -136,16 +136,43 @@ const StartupForm = () => {
                         <label htmlFor="industry" className="form-label">
                           Industry
                         </label>
-                        <input
-                          type="text"
-                          className="form-control"
+                        <select
+                          className="form-select"
                           id="industry"
                           name="industry"
                           value={formData.industry}
                           onChange={handleChange}
                           required
                           disabled={isSubmitting}
-                        />
+                        >
+                          <option value="">Select an industry</option>
+                          <option value="technology">Technology</option>
+                          <option value="healthcare">Healthcare & Biotech</option>
+                          <option value="fintech">Financial Technology (FinTech)</option>
+                          <option value="ecommerce">E-commerce & Retail</option>
+                          <option value="education">Education Technology (EdTech)</option>
+                          <option value="food">Food & Beverage</option>
+                          <option value="transportation">Transportation & Logistics</option>
+                          <option value="real-estate">Real Estate & PropTech</option>
+                          <option value="energy">Energy & Sustainability</option>
+                          <option value="entertainment">Entertainment & Media</option>
+                          <option value="agriculture">Agriculture & AgTech</option>
+                          <option value="manufacturing">Manufacturing & Industrial</option>
+                          <option value="travel">Travel & Hospitality</option>
+                          <option value="fitness">Fitness & Wellness</option>
+                          <option value="fashion">Fashion & Beauty</option>
+                          <option value="gaming">Gaming & Esports</option>
+                          <option value="cybersecurity">Cybersecurity</option>
+                          <option value="ai-ml">Artificial Intelligence & Machine Learning</option>
+                          <option value="blockchain">Blockchain & Cryptocurrency</option>
+                          <option value="iot">Internet of Things (IoT)</option>
+                          <option value="saas">Software as a Service (SaaS)</option>
+                          <option value="marketplace">Marketplace & Platform</option>
+                          <option value="social">Social Media & Networking</option>
+                          <option value="consulting">Consulting & Professional Services</option>
+                          <option value="other">Other</option>
+                        </select>
+                        <div className="form-text">Choose the industry that best describes your startup</div>
                       </div>
 
                       <div className="mb-3">
