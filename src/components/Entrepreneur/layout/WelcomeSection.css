@@ -1,0 +1,33 @@
+.welcome-container {
+  transition: transform 0.2s ease-in-out;
+}
+
+.welcome-container:hover {
+  transform: translateY(-2px);
+}
+
+.notification-bell {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.notification-bell:hover {
+  transform: scale(1.1);
+}
+
+.notification-badge {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

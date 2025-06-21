@@ -1,8 +1,8 @@
 import React from 'react';
-import WelcomeSection from '../../components/EntrepreneurDashboardComponents/layout/WelcomeSection';
-import StatsSection from '../../components/EntrepreneurDashboardComponents/stats/StatsSection';
-import ActionsSection from '../../components/EntrepreneurDashboardComponents/actions/ActionsSection';
-import ActivitySection from '../../components/EntrepreneurDashboardComponents/activity/ActivitySection';
+import WelcomeSection from '../../components/Entrepreneur/layout/WelcomeSection';
+import StatsSection from '../../components/Entrepreneur/stats/StatsSection';
+import ActionsSection from '../../components/Entrepreneur/actions/ActionsSection';
+import ActivitySection from '../../components/Entrepreneur/activity/ActivitySection';
 
 const EntrepreneurDashboard = () => {
   return (

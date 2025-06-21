@@ -36,7 +36,26 @@ const ManageIdeas = () => {
       const res = await fetch(`${baseURL}/api/startups/getIdeas`)
       if (!res.ok) throw new Error("Failed to fetch ideas")
       const data = await res.json()
-      setStartupIdeas(data)
+      
+      // Map the backend data to frontend expected structure
+      const mappedData = data.map(idea => ({
+        id: idea._id,
+        _id: idea._id,
+        title: idea.startupName,
+        entrepreneur: idea.entrepreneurId?.name || 'Unknown',
+        email: idea.entrepreneurId?.email || '',
+        industry: idea.industry,
+        date: new Date(idea.createdAt).toLocaleDateString(),
+        status: idea.status,
+        description: idea.description,
+        feedback: idea.feedback,
+        fundingRequired: idea.fundingRequired,
+        stage: idea.stage,
+        startupName: idea.startupName,
+        entrepreneurId: idea.entrepreneurId
+      }))
+      
+      setStartupIdeas(mappedData)
     } catch (err) {
       setError("Error fetching ideas. Please try again.")
       console.error("Error fetching ideas:", err)
@@ -52,9 +71,9 @@ const ManageIdeas = () => {
   // Filter ideas based on search and status
   const filteredIdeas = startupIdeas.filter((idea) => {
     const matchesSearch =
-      idea.startupName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      idea.industry.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      idea.description.toLowerCase().includes(searchQuery.toLowerCase())
+      idea.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      idea.entrepreneur.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      idea.industry.toLowerCase().includes(searchQuery.toLowerCase())
     return filterStatus === "all" ? matchesSearch : matchesSearch && idea.status === filterStatus
   })
 

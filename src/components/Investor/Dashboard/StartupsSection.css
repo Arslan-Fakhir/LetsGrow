@@ -1,0 +1,41 @@
+.startups-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.startups-header {
+  text-align: center;
+}
+
+.section-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+
+.section-subtitle {
+  color: #6b7280;
+  max-width: 42rem;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.startups-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .startups-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .startups-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

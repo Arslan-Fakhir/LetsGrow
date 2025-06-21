@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Sidebar from "./components/EntrepreneurDashboardComponents/Sidebar/Sidebar"; 
@@ -12,7 +12,7 @@ import ManpowerForm from "./components/EntrepreneurDashboardComponents/forms/Man
 import InvestorDashboard from "./pages/InvestorDashboard/InvestorDashboard";
 import Transaction from "./pages/InvestorDashboard/Transaction";
 import BrowseStartups from "./pages/InvestorDashboard/BrowseStartups";
-import FormPage from "./pages/InvestorDashboard/StartupDetails";
+import StartupDetailsPage from "./pages/InvestorDashboard/StartupDetails";
 import ManageIdeas from "./pages/ManageIdeas/ManageIdeas";
 import ManageInvestments from "./pages/ManageInvestments/ManageInvestments";
 import UserProfile from "./pages/UserProfile/UserProfile";
@@ -20,54 +20,45 @@ import Admin from "./pages/Admin/Admin";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import "./App.css";
 
-const ProtectedRoute = ({ children }) => {
-  const { auth, login } = useAuth();
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+const RoleProtectedRoute = ({ children, allowedRoles }) => {
+  const { auth, isAdmin, isEntrepreneur, isInvestor } = useAuth();
+  const location = useLocation();
 
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/checklogin`, {
-          method: 'GET',
-          credentials: 'include',
-        });
-        const data = await response.json();
-
-        if (response.ok && data.ok) {
-          login({ userId: data.userId });
-          setLoading(false);
-        } else {
-          toast.error(data.message || 'Session expired. Please log in again.');
-          navigate('/login');
-        }
-      } catch (error) {
-        toast.error('Error checking login status.');
-        navigate('/login');
-      } finally {
-        setLoading(false);
-      }
-    };
-    checkLoginStatus();
-  }, [navigate]);
-
-  if (loading) {
+  if (auth.loading) {
     return <div className="loading-spinner">Loading...</div>;
   }
 
-  return auth.user ? children : <Navigate to="/login" replace />;
+  if (!auth.user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // Check if user has any of the allowed roles
+  const hasRequiredRole = allowedRoles.some(role => {
+    if (role === 'admin') return isAdmin();
+    if (role === 'entrepreneur') return isEntrepreneur();
+    if (role === 'investor') return isInvestor();
+    return false;
+  });
+
+  if (!hasRequiredRole) {
+    // Redirect to default dashboard based on their actual role
+    const defaultRoute = isAdmin() ? '/admin' :
+                       isEntrepreneur() ? '/dashboard' :
+                       '/investor-dashboard';
+    toast.error('You do not have permission to access this page');
+    return <Navigate to={defaultRoute} replace />;
+  }
+
+  return children;
 };
 
 const MainLayout = ({ children, toggleSidebar, sidebarExpanded }) => {
   const { auth } = useAuth();
   const location = useLocation();
-
-  // Check if current route is login or signup
   const isAuthPage = ['/login', '/signup'].includes(location.pathname);
 
   return (
     <div className="d-flex">
-      {/* Show sidebar only when authenticated and not on auth pages */}
       {auth.user && !isAuthPage && (
         <Sidebar
           sidebarExpanded={sidebarExpanded}
@@ -82,7 +73,6 @@ const MainLayout = ({ children, toggleSidebar, sidebarExpanded }) => {
           transition: 'margin-left 0.3s ease-in-out'
         }}
       >
-        {/* Show navbar only when authenticated and not on auth pages */}
         {auth.user && !isAuthPage && (
           <TopNavbar toggleSidebar={toggleSidebar} />
         )}
@@ -96,7 +86,6 @@ const MainLayout = ({ children, toggleSidebar, sidebarExpanded }) => {
 };
 
 function App() {
-  const [activeMenuItem, setActiveMenuItem] = useState('Dashboard');
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
   const toggleSidebar = () => {
@@ -113,26 +102,75 @@ function App() {
           
           {/* All protected routes */}
           <Route path="/*" element={
-            <ProtectedRoute>
-              <MainLayout 
-                toggleSidebar={toggleSidebar} 
-                sidebarExpanded={(!sidebarExpanded)}
-              >
-                <Routes>
-                  <Route path="/dashboard" element={<EntrepreneurDashboard />} />
-                  <Route path="/apply-startup" element={<StartupForm />} />
-                  <Route path="/request-manpower" element={<ManpowerForm />} />
-                  <Route path="/investor-dashboard" element={<InvestorDashboard />} />
-                  <Route path="/transaction" element={<Transaction />} />
-                  <Route path="/browse" element={<BrowseStartups />} />
-                  <Route path="/showDetails" element={<FormPage />} />
-                  <Route path="/admin" element={<Admin />} />
-                  <Route path="/manage-ideas" element={<ManageIdeas />} />
-                  <Route path="/user-profile" element={<UserProfile />} />
-                  <Route path="/manage-investment" element={<ManageInvestments />} />
-                </Routes>
-              </MainLayout>
-            </ProtectedRoute>
+            <MainLayout 
+              toggleSidebar={toggleSidebar} 
+              sidebarExpanded={sidebarExpanded}
+            >
+              <Routes>
+                {/* Entrepreneur Routes */}
+                <Route path="/dashboard" element={
+                  <RoleProtectedRoute allowedRoles={['entrepreneur']}>
+                    <EntrepreneurDashboard />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/apply-startup" element={
+                  <RoleProtectedRoute allowedRoles={['entrepreneur']}>
+                    <StartupForm />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/request-manpower" element={
+                  <RoleProtectedRoute allowedRoles={['entrepreneur']}>
+                    <ManpowerForm />
+                  </RoleProtectedRoute>
+                } />
+
+                {/* Investor Routes */}
+                <Route path="/investor-dashboard" element={
+                  <RoleProtectedRoute allowedRoles={['investor']}>
+                    <InvestorDashboard />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/transaction" element={
+                  <RoleProtectedRoute allowedRoles={['investor']}>
+                    <Transaction />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/browseStartups" element={
+                  <RoleProtectedRoute allowedRoles={['investor']}>
+                    <BrowseStartups />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/viewDetails/:id" element={
+                  <RoleProtectedRoute allowedRoles={['investor']}>
+                    <StartupDetailsPage />
+                  </RoleProtectedRoute>
+                } />
+
+                {/* Admin Routes */}
+                <Route path="/admin" element={
+                  <RoleProtectedRoute allowedRoles={['admin']}>
+                    <Admin />
+                  </RoleProtectedRoute>
+                } />
+
+                {/* Shared Routes */}
+                <Route path="/manage-ideas" element={
+                  <RoleProtectedRoute allowedRoles={['entrepreneur', 'admin']}>
+                    <ManageIdeas />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/user-profile" element={
+                  <RoleProtectedRoute allowedRoles={['entrepreneur', 'investor', 'admin']}>
+                    <UserProfile />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/manage-investment" element={
+                  <RoleProtectedRoute allowedRoles={['investor', 'admin']}>
+                    <ManageInvestments />
+                  </RoleProtectedRoute>
+                } />
+              </Routes>
+            </MainLayout>
           } />
         </Routes>
       </Router>

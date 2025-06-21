@@ -1,18 +1,8 @@
-import React from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
+import axios from "axios";
 import "./BrowseStartups.css";
-
-const startups = [
-  {
-    id: 1,
-    name: "Sustainable Waterplants",
-    entrepreneur: "Saad",
-    description: "A smart solution to grow aquatic plants sustainably in urban environments.",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdDggk-iYVfU3dzfVcT8ipg-GSFg6mdhOT1g&s",
-    rating: 3,
-  },
-  // ... other startup data
-];
 
 const StarRating = ({ count }) => (
   <div className="d-flex mb-2">
@@ -28,24 +18,78 @@ const StarRating = ({ count }) => (
 );
 
 const BrowseStartups = () => {
+  const [startups, setStartups] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchStartups = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/startups/startups`);
+        setStartups(response.data);
+      } catch (err) {
+        console.error("API error:", err.response?.data || err.message);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStartups();
+  }, []);
+
+  const handleViewDetails = (startupId) => {
+    navigate(`/viewDetails/${startupId}`);
+  };
+
+  if (loading) {
+    return (
+      <Container className="d-flex justify-content-center align-items-center min-vh-100">
+        <Spinner animation="border" variant="success" />
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container className="d-flex justify-content-center align-items-center min-vh-100">
+        <div className="alert alert-danger">Error: {error}</div>
+      </Container>
+    );
+  }
+
   return (
     <Container fluid className="min-vh-100 bg-light py-5">
       <Container>
         <h1 className="text-center mb-5">🌱 Browse Startup Ideas</h1>
 
         <Row className="g-4">
-          {startups.map(({ id, name, entrepreneur, description, image, rating }) => (
-            <Col key={id} xs={12} md={6} lg={4}>
+          {startups.map(({ _id, startupName, entrepreneurId, description, imageUrl, rating }) => (
+            <Col key={_id} xs={12} md={6} lg={4}>
               <Card className="h-100 shadow-sm border-0">
-                <Card.Img variant="top" src={image} className="object-fit-cover" style={{ height: "160px" }} />
+                {imageUrl && (
+                  <Card.Img 
+                    variant="top" 
+                    src={imageUrl} 
+                    className="object-fit-cover" 
+                    style={{ height: "160px" }} 
+                  />
+                )}
                 <Card.Body className="d-flex flex-column">
-                  <Card.Title>{name}</Card.Title>
+                  <Card.Title>{startupName}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
-                    Founder: {entrepreneur}
+                    Founder: {entrepreneurId?.name || "Unknown"}
                   </Card.Subtitle>
                   <Card.Text className="flex-grow-1">{description}</Card.Text>
-                  <StarRating count={rating} />
-                  <Button variant="success" className="mt-3">View Details</Button>
+                  <StarRating count={rating || 0} />
+                  <Button 
+                    variant="success" 
+                    className="mt-3"
+                    onClick={() => handleViewDetails(_id)}
+                  >
+                    View Details
+                  </Button>
                 </Card.Body>
               </Card>
             </Col>

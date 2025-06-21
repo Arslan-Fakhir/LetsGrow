@@ -1,0 +1,15 @@
+.activity-item {
+  transition: background-color 0.2s ease-in-out;
+}
+
+.activity-item:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.activity-icon {
+  transition: transform 0.2s ease-in-out;
+}
+
+.activity-item:hover .activity-icon {
+  transform: scale(1.1);
+}

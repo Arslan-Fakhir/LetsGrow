@@ -1,5 +1,6 @@
+// pages/Login/Login.js
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from 'react-toastify';
@@ -11,6 +12,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -34,26 +36,20 @@ const Login = () => {
       });
 
       const data = await response.json();
-      console.log("Login response data:", data); // For debugging
 
       if (response.ok) {
         const user = data.data.user;
         toast.success('Logged in successfully');
-       // toast.info(`You are logged in as ${user.role}`);
 
-        // Store user in context (adjust this line if you store tokens too)
-        login(user);
+        await login(user);
 
-        // Role-based redirection
-        if (user.role === 'entrepreneur') {
-          navigate('/dashboard');
-        } else if (user.role === 'investor') {
-          navigate('/investor-dashboard');
-        } else if (user.role === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/');
-        }
+        // Redirect to the originally requested page or role-based default
+        const from = location.state?.from?.pathname || 
+                     (user.role === 'entrepreneur' ? '/dashboard' :
+                      user.role === 'investor' ? '/investor-dashboard' :
+                      user.role === 'admin' ? '/admin' : '/');
+        
+        navigate(from, { replace: true });
 
       } else {
         toast.error(data.message || 'Login failed');

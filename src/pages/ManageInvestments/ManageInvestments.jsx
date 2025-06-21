@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { useLocation } from "react-router-dom"
-import Sidebar from "../../components/Admin_Dashboard/Sidebar/Sidebar"
-import TopNavbar from "../../components/Admin_Dashboard/TopNavbar/TopNavbar"
 import InvestmentList from "../../components/ManageInvestments/InvestmentList/InvestmentList"
 import InvestmentDetailsModal from "../../components/ManageInvestments/InvestmentDetailsModal/InvestmentDetailsModal"
 import FeedbackModal from "../../components/ManageInvestments/FeedbackModal/FeedbackModal"
@@ -124,34 +122,11 @@ const ManageInvestments = () => {
   const [hasChanges, setHasChanges] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const [activeMenuItem, setActiveMenuItem] = useState("Manage Investments")
-  const [sidebarExpanded, setSidebarExpanded] = useState(false)
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
-
-  // Handle window resize
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth)
-      if (window.innerWidth < 768) {
-        setSidebarExpanded(false)
-      }
-    }
-
-    window.addEventListener("resize", handleResize)
-    handleResize() // Initialize on first render
-
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
 
   // Apply filters when filterStatus changes
   useEffect(() => {
     applyFilters()
   }, [filterStatus, investments])
-
-  // Toggle sidebar
-  const toggleSidebar = () => {
-    setSidebarExpanded(!sidebarExpanded)
-  }
 
   // Apply filters based on status
   const applyFilters = () => {
@@ -234,103 +209,80 @@ const ManageInvestments = () => {
   const rejectedCount = investments.filter((investment) => investment.status === "rejected").length
 
   return (
-    <div className="d-flex vh-100">
-      <Sidebar
-        activeMenuItem={activeMenuItem}
-        setActiveMenuItem={setActiveMenuItem}
-        sidebarExpanded={sidebarExpanded}
-        toggleSidebar={toggleSidebar}
-      />
+    <div className="manage-investments-container p-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 className="mb-1">Manage Investments</h2>
+          <p className="text-muted">Review, approve, or reject investment requests from investors</p>
+        </div>
+      </div>
 
-      {/* Main Content */}
-      <div
-        className="flex-grow-1 d-flex flex-column transition-all"
-        style={{
-          marginLeft: windowWidth >= 768 ? (sidebarExpanded ? "250px" : "80px") : "0",
-          transition: "margin 0.3s ease-in-out",
-        }}
-      >
-        <TopNavbar toggleSidebar={toggleSidebar} />
-
-        {/* Page Content */}
-        <main className="flex-grow-1 overflow-auto bg-light">
-          <div className="manage-investments-container p-4">
-            <div className="d-flex justify-content-between align-items-center mb-4">
-              <div>
-                <h2 className="mb-1">Manage Investments</h2>
-                <p className="text-muted">Review, approve, or reject investment requests from investors</p>
-              </div>
-            </div>
-
-            {/* Filter Section */}
-            <div className="card border-0 shadow-sm mb-4">
-              <div className="card-body d-flex justify-content-between align-items-center">
-                <div className="d-flex gap-2 align-items-center">
-                  <StatusFilter
-                    filterStatus={filterStatus}
-                    setFilterStatus={setFilterStatus}
-                    pendingCount={pendingCount}
-                    approvedCount={approvedCount}
-                    rejectedCount={rejectedCount}
-                    totalCount={investments.length}
-                  />
-                </div>
-                <div className="d-flex gap-2">
-                  <button
-                    className="btn btn-outline-secondary d-flex align-items-center gap-2"
-                    onClick={handleRefresh}
-                    disabled={isRefreshing}
-                  >
-                    <RefreshCw size={16} className={isRefreshing ? "spin" : ""} />
-                    Refresh
-                  </button>
-                  {hasChanges && (
-                    <button className="btn btn-success d-flex align-items-center gap-2" onClick={handleSaveChanges}>
-                      <Save size={16} />
-                      Save
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Investments List */}
-            <InvestmentList
-              investments={filteredInvestments}
-              handleViewDetails={handleViewDetails}
-              handleAction={handleAction}
-            />
-
-            {/* Success Message */}
-            {saveSuccess && (
-              <div className="save-success-message">
-                <div className="alert alert-success d-flex align-items-center" role="alert">
-                  <div>Changes saved successfully!</div>
-                </div>
-              </div>
-            )}
-
-            {/* View Details Modal */}
-            <InvestmentDetailsModal
-              showDetailsModal={showDetailsModal}
-              selectedInvestment={selectedInvestment}
-              setShowDetailsModal={setShowDetailsModal}
-              handleAction={handleAction}
-            />
-
-            {/* Feedback Modal */}
-            <FeedbackModal
-              showFeedbackModal={showFeedbackModal}
-              selectedInvestment={selectedInvestment}
-              actionType={actionType}
-              feedback={feedback}
-              setFeedback={setFeedback}
-              setShowFeedbackModal={setShowFeedbackModal}
-              handleFeedbackSubmit={handleFeedbackSubmit}
+      {/* Filter Section */}
+      <div className="card border-0 shadow-sm mb-4">
+        <div className="card-body d-flex justify-content-between align-items-center">
+          <div className="d-flex gap-2 align-items-center">
+            <StatusFilter
+              filterStatus={filterStatus}
+              setFilterStatus={setFilterStatus}
+              pendingCount={pendingCount}
+              approvedCount={approvedCount}
+              rejectedCount={rejectedCount}
+              totalCount={investments.length}
             />
           </div>
-        </main>
+          <div className="d-flex gap-2">
+            <button
+              className="btn btn-outline-secondary d-flex align-items-center gap-2"
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+            >
+              <RefreshCw size={16} className={isRefreshing ? "spin" : ""} />
+              Refresh
+            </button>
+            {hasChanges && (
+              <button className="btn btn-success d-flex align-items-center gap-2" onClick={handleSaveChanges}>
+                <Save size={16} />
+                Save
+              </button>
+            )}
+          </div>
+        </div>
       </div>
+
+      {/* Investments List */}
+      <InvestmentList
+        investments={filteredInvestments}
+        handleViewDetails={handleViewDetails}
+        handleAction={handleAction}
+      />
+
+      {/* Success Message */}
+      {saveSuccess && (
+        <div className="save-success-message">
+          <div className="alert alert-success d-flex align-items-center" role="alert">
+            <div>Changes saved successfully!</div>
+          </div>
+        </div>
+      )}
+
+      {/* View Details Modal */}
+      <InvestmentDetailsModal
+        showDetailsModal={showDetailsModal}
+        selectedInvestment={selectedInvestment}
+        setShowDetailsModal={setShowDetailsModal}
+        handleAction={handleAction}
+      />
+
+      {/* Feedback Modal */}
+      <FeedbackModal
+        showFeedbackModal={showFeedbackModal}
+        selectedInvestment={selectedInvestment}
+        actionType={actionType}
+        feedback={feedback}
+        setFeedback={setFeedback}
+        setShowFeedbackModal={setShowFeedbackModal}
+        handleFeedbackSubmit={handleFeedbackSubmit}
+      />
     </div>
   )
 }
