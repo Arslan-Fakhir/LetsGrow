@@ -1,49 +1,36 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Bell, User, Settings, HelpCircle, LogOut, Menu, UserPlus, Lightbulb } from "lucide-react";
+import { Bell, User, Settings, HelpCircle, Menu, UserPlus, Lightbulb } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 import "./TopNavbar.css";
-import logo from "../../assets/logo.svg"
+import logo from "../../assets/logo.svg";
 
 const TopNavbar = ({ toggleSidebar }) => {
-  const [notificationOpen, setNotificationOpen] = useState(false)
-  const [profileOpen, setProfileOpen] = useState(false)
-  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const { auth } = useAuth();
 
-  const navigate = useNavigate()
-  const notificationRef = useRef(null)
-  const profileRef = useRef(null)
-  const logoutModalRef = useRef(null)
+  const navigate = useNavigate();
+  const notificationRef = useRef(null);
+  const profileRef = useRef(null);
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (notificationRef.current && !notificationRef.current.contains(event.target)) {
-        setNotificationOpen(false)
+        setNotificationOpen(false);
       }
       if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setProfileOpen(false)
+        setProfileOpen(false);
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
-  const handleLogoutClick = (e) => {
-    e.preventDefault()
-    setShowLogoutConfirm(true)
-    setProfileOpen(false)
-  }
-
-  const handleLogoutConfirm = () => {
-    navigate("/login")
-    setShowLogoutConfirm(false)
-  }
-
-  const handleLogoutCancel = () => {
-    setShowLogoutConfirm(false)
-  }
+  const profileImageUrl = auth.user?.profileImage?.url || "https://via.placeholder.com/40";
 
   return (
     <header className="bg-dark text-white py-2 px-3 d-flex align-items-center justify-content-between sticky-top">
@@ -55,7 +42,7 @@ const TopNavbar = ({ toggleSidebar }) => {
 
       <div className="d-flex align-items-center">
         <Link to="/" className="text-decoration-none text-white">
-          <img src={logo}alt="Logo" style={{ height: "32px", width: "auto" }} className="d-block" />
+          <img src={logo} alt="Logo" style={{ height: "32px", width: "auto" }} className="d-block" />
         </Link>
       </div>
 
@@ -84,10 +71,7 @@ const TopNavbar = ({ toggleSidebar }) => {
             <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">2</span>
           </button>
           {notificationOpen && (
-            <div
-              className="position-absolute end-0 mt-2 bg-white rounded shadow custom-dropdown-menu"
-              style={{ minWidth: "300px", zIndex: 1050 }}
-            >
+            <div className="position-absolute end-0 mt-2 bg-white rounded shadow custom-dropdown-menu" style={{ minWidth: "300px", zIndex: 1050 }}>
               <div className="p-2 border-bottom d-flex justify-content-between align-items-center">
                 <span className="fw-medium text-dark">Notifications</span>
                 <a href="#" className="text-decoration-none small">
@@ -126,63 +110,36 @@ const TopNavbar = ({ toggleSidebar }) => {
         </div>
 
         <div className="position-relative" ref={profileRef}>
-          <button className="btn btn-dark p-0" onClick={() => setProfileOpen(!profileOpen)}>
+          <button className="btn btn-dark p-0 d-flex align-items-center justify-content-center" style={{ width: "40px", height: "40px" }} onClick={() => setProfileOpen(!profileOpen)}>
             <img
-              src="https://via.placeholder.com/40"
+              src={profileImageUrl}
               alt="User profile"
-              className="rounded-circle"
+              className="rounded-circle object-fit-cover"
               width="40"
               height="40"
-              style={{ objectFit: "cover" }}
             />
           </button>
           {profileOpen && (
-            <div
-              className="position-absolute end-0 mt-2 bg-white rounded shadow custom-dropdown-menu"
-              style={{ minWidth: "200px", zIndex: 1050 }}
-            >
-              <a href="#" className="d-flex align-items-center p-2 text-decoration-none text-dark custom-dropdown-item">
+            <div className="position-absolute end-0 mt-2 bg-white rounded shadow custom-dropdown-menu" style={{ minWidth: "200px", zIndex: 1050 }}>
+              <Link 
+                to="/user-profile" 
+                className="d-flex align-items-center p-2 text-decoration-none text-dark custom-dropdown-item"
+                onClick={() => setProfileOpen(false)}
+              >
                 <User size={16} className="me-2" /> <span>Profile</span>
-              </a>
+              </Link>
               <a href="#" className="d-flex align-items-center p-2 text-decoration-none text-dark custom-dropdown-item">
                 <Settings size={16} className="me-2" /> <span>Account Settings</span>
               </a>
               <a href="#" className="d-flex align-items-center p-2 text-decoration-none text-dark custom-dropdown-item">
                 <HelpCircle size={16} className="me-2" /> <span>Help Center</span>
               </a>
-              <div className="dropdown-divider my-1"></div>
-              <a
-                href="#"
-                className="d-flex align-items-center p-2 text-decoration-none text-dark custom-dropdown-item"
-                onClick={handleLogoutClick}
-                data-logout-trigger="true"
-              >
-                <LogOut size={16} className="me-2" /> <span>Log Out</span>
-              </a>
             </div>
           )}
         </div>
       </div>
-
-      {showLogoutConfirm && (
-        <div className="logout-modal-overlay">
-          <div className="logout-modal-container" ref={logoutModalRef}>
-            <div className="logout-modal-content">
-              <h5 className="mb-3">Confirm Logout</h5>
-              <p>Are you sure you want to logout?</p>
-              <div className="d-flex justify-content-end gap-2 mt-4">
-                <button className="btn btn-secondary" onClick={handleLogoutCancel}>
-                  No
-                </button>
-                <button className="btn btn-danger" onClick={handleLogoutConfirm}>
-                  Yes
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
-  )
-}
+  );
+};
+
 export default TopNavbar;

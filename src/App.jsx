@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Sidebar from "./components/EntrepreneurDashboardComponents/Sidebar/Sidebar"; 
-import TopNavbar from "./components/EntrepreneurDashboardComponents/TopNavbar/TopNavbar"; 
+import Sidebar from "./components/Sidebar/Sidebar"; 
+import TopNavbar from "./components/TopNavbar/TopNavbar"; 
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
 import EntrepreneurDashboard from "./pages/Dashboard/EntrepreneurDashboard";
-import StartupForm from "./components/EntrepreneurDashboardComponents/forms/StartupForm";
-import ManpowerForm from "./components/EntrepreneurDashboardComponents/forms/ManpowerForm";
+import StartupForm from "./components/Entrepreneur/forms/StartupForm";
+import ManpowerForm from "./components/Entrepreneur/forms/ManpowerForm";
 import InvestorDashboard from "./pages/InvestorDashboard/InvestorDashboard";
 import Transaction from "./pages/InvestorDashboard/Transaction";
 import BrowseStartups from "./pages/InvestorDashboard/BrowseStartups";
@@ -86,7 +86,7 @@ const MainLayout = ({ children, toggleSidebar, sidebarExpanded }) => {
 };
 
 function App() {
-  const [sidebarExpanded, setSidebarExpanded] = useState(true);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
   const toggleSidebar = () => {
     setSidebarExpanded(!sidebarExpanded);

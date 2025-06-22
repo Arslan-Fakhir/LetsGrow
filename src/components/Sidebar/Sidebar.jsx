@@ -22,7 +22,7 @@ import {
 } from "lucide-react"
 import "./Sidebar.css"
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 
 const getMenuItems = (role) => {
   const menuItems = {
@@ -64,21 +64,21 @@ const getMenuItems = (role) => {
   return menuItems[role]
 }
 
-const Sidebar = ({ 
-  activeMenuItem: propActiveMenuItem, 
-  setActiveMenuItem: propSetActiveMenuItem, 
-  sidebarExpanded, 
-  toggleSidebar 
+const Sidebar = ({
+  activeMenuItem: propActiveMenuItem,
+  setActiveMenuItem: propSetActiveMenuItem,
+  sidebarExpanded,
+  toggleSidebar,
 }) => {
   const [searchQuery, setSearchQuery] = useState("")
   const [userData, setUserData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const [error, setError] = useState(null)
-  
+
   const location = useLocation()
   const navigate = useNavigate()
-  
+
   // Create internal state if prop is not provided
   const [internalActiveMenuItem, internalSetActiveMenuItem] = useState("Dashboard")
   const activeMenuItem = propActiveMenuItem !== undefined ? propActiveMenuItem : internalActiveMenuItem
@@ -89,13 +89,13 @@ const Sidebar = ({
     try {
       setIsLoading(true)
       setError(null)
-      
-      const response = await fetch(`${API_BASE_URL}/auth/getuser`, {
-        method: 'GET',
+
+      const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
       })
 
       const data = await response.json()
@@ -103,15 +103,14 @@ const Sidebar = ({
       if (data.ok && data.data) {
         setUserData(data.data)
       } else {
-        throw new Error(data.message || 'Failed to fetch user data')
+        throw new Error(data.message || "Failed to fetch user data")
       }
     } catch (err) {
-      console.error('Error fetching user data:', err)
+      console.error("Error fetching user data:", err)
       setError(err.message)
-      
-      // If it's an auth error, redirect to login
-      if (err.message.includes('unauthorized') || err.message.includes('token') || err.message.includes('Invalid')) {
-        navigate('/login')
+
+      if (err.message.includes("unauthorized") || err.message.includes("token") || err.message.includes("Invalid")) {
+        navigate("/login")
       }
     } finally {
       setIsLoading(false)
@@ -120,148 +119,134 @@ const Sidebar = ({
 
   const handleLogout = async () => {
     if (isLoggingOut) return
-    
+
     try {
       setIsLoggingOut(true)
-      
+
       const response = await fetch(`${API_BASE_URL}/auth/logout`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
       })
 
       const data = await response.json()
 
       if (data.ok) {
         setUserData(null)
-        navigate('/login')
-        console.log('Logged out successfully')
+        navigate("/login")
+        console.log("Logged out successfully")
       } else {
-        throw new Error(data.message || 'Logout failed')
+        throw new Error(data.message || "Logout failed")
       }
     } catch (err) {
-      console.error('Logout error:', err)
-      // Even if logout fails on server, clear local state and redirect
+      console.error("Logout error:", err)
       setUserData(null)
-      navigate('/login')
+      navigate("/login")
     } finally {
       setIsLoggingOut(false)
     }
   }
 
-  // Check authentication status and fetch user data on component mount
   useEffect(() => {
     const initializeUser = async () => {
       try {
-        // First check if user is authenticated
         const authResponse = await fetch(`${API_BASE_URL}/auth/checklogin`, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          credentials: 'include',
+          credentials: "include",
         })
 
         const authData = await authResponse.json()
 
         if (authData.ok) {
-          // User is authenticated, fetch user data
           await fetchUserData()
         } else {
-          // User is not authenticated, redirect to login
-          navigate('/login')
+          navigate("/login")
         }
       } catch (err) {
-        console.error('Auth check error:', err)
-        navigate('/login')
+        console.error("Auth check error:", err)
+        navigate("/login")
       }
     }
 
     initializeUser()
   }, [navigate])
 
-  // Get menu items based on user role
-  const userRole = userData?.role || 'entrepreneur'
+  const userRole = userData?.role || "entrepreneur"
   const { main: menuItems, additional: additionalMenuItems } = getMenuItems(userRole)
 
-  // Set active menu item based on current path
   useEffect(() => {
     const path = location.pathname
     const menuItem =
-      menuItems.find((item) => item.path === path) || 
-      additionalMenuItems.find((item) => item.path === path)
+      menuItems.find((item) => item.path === path) || additionalMenuItems.find((item) => item.path === path)
 
     if (menuItem) {
       setActiveMenuItem(menuItem.name)
     }
   }, [location, menuItems, additionalMenuItems, setActiveMenuItem])
 
-  // Filter menu items based on search query
-  const filteredMainItems = menuItems.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
-  
-  const filteredAdditionalItems = additionalMenuItems.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredMainItems = menuItems.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
+
+  const filteredAdditionalItems = additionalMenuItems.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  // Loading state
   if (isLoading) {
     return (
       <>
         <button
-          className="d-md-none position-fixed bottom-0 end-0 m-3 btn btn-success rounded-circle z-3 shadow"
-          style={{ width: "50px", height: "50px" }}
+          className="sidebar-toggle-btn d-md-none"
           onClick={toggleSidebar}
           aria-label={sidebarExpanded ? "Close menu" : "Open menu"}
         >
           {sidebarExpanded ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        <aside className={sidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"}>
-          <div className="sidebar-content d-flex flex-column h-100 justify-content-center align-items-center">
-            <div className="spinner-border text-success" role="status">
-              <span className="visually-hidden">Loading...</span>
+        <aside className={`sidebar ${sidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"}`}>
+          <div className="sidebar-content">
+            <div className="d-flex flex-column h-100 justify-content-center align-items-center">
+              <div className="spinner-border text-success" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              {sidebarExpanded && <p className="mt-2 text-muted">Loading user data...</p>}
             </div>
-            {sidebarExpanded && <p className="mt-2 text-muted">Loading user data...</p>}
           </div>
         </aside>
       </>
     )
   }
 
-  // Error state
   if (error && !userData) {
     return (
       <>
         <button
-          className="d-md-none position-fixed bottom-0 end-0 m-3 btn btn-success rounded-circle z-3 shadow"
-          style={{ width: "50px", height: "50px" }}
+          className="sidebar-toggle-btn d-md-none"
           onClick={toggleSidebar}
           aria-label={sidebarExpanded ? "Close menu" : "Open menu"}
         >
           {sidebarExpanded ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        <aside className={sidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"}>
-          <div className="sidebar-content d-flex flex-column h-100 justify-content-center align-items-center">
-            <div className="text-danger">
-              <AlertCircle size={48} />
-            </div>
-            {sidebarExpanded && (
-              <div className="text-center mt-2">
-                <p className="text-danger">Error loading sidebar</p>
-                <small className="text-muted d-block mb-2">{error}</small>
-                <button 
-                  className="btn btn-sm btn-outline-success" 
-                  onClick={fetchUserData}
-                >
-                  Retry
-                </button>
+        <aside className={`sidebar ${sidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"}`}>
+          <div className="sidebar-content">
+            <div className="d-flex flex-column h-100 justify-content-center align-items-center p-3">
+              <div className="text-danger mb-2">
+                <AlertCircle size={48} />
               </div>
-            )}
+              {sidebarExpanded && (
+                <div className="text-center">
+                  <p className="text-danger mb-1">Error loading sidebar</p>
+                  <small className="text-muted d-block mb-3">{error}</small>
+                  <button className="btn btn-sm btn-outline-success" onClick={fetchUserData}>
+                    Retry
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </aside>
       </>
@@ -270,18 +255,19 @@ const Sidebar = ({
 
   return (
     <>
+      {/* Mobile Toggle Button */}
       <button
-        className="d-md-none position-fixed bottom-0 end-0 m-3 btn btn-success rounded-circle z-3 shadow"
-        style={{ width: "50px", height: "50px" }}
+        className="sidebar-toggle-btn d-md-none"
         onClick={toggleSidebar}
         aria-label={sidebarExpanded ? "Close menu" : "Open menu"}
       >
         {sidebarExpanded ? <X size={24} /> : <Menu size={24} />}
       </button>
 
+      {/* Mobile Overlay */}
       {sidebarExpanded && (
         <div
-          className="sidebar-overlay show d-md-none"
+          className="sidebar-overlay d-md-none"
           onClick={toggleSidebar}
           role="button"
           aria-label="Close menu"
@@ -289,21 +275,22 @@ const Sidebar = ({
         />
       )}
 
-      <aside className={sidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"} aria-expanded={sidebarExpanded}>
-        <div className="sidebar-content d-flex flex-column h-100">
+      {/* Sidebar */}
+      <aside
+        className={`sidebar ${sidebarExpanded ? "sidebar-expanded" : "sidebar-collapsed"}`}
+        aria-expanded={sidebarExpanded}
+      >
+        <div className="sidebar-content">
           {/* Header */}
-          <div className="d-flex align-items-center justify-content-between p-3 border-bottom">
-            <Link to="/dashboard" className="text-decoration-none text-dark d-flex align-items-center gap-2">
-              <div
-                className="d-flex align-items-center justify-content-center"
-                style={{ width: "32px", height: "32px" }}
-              >
+          <div className="sidebar-header">
+            <Link to="/dashboard" className="sidebar-brand">
+              <div className="brand-icon">
                 <Briefcase size={24} className="text-success" />
               </div>
-              {sidebarExpanded && <span className="fs-5 fw-bold">let's grow</span>}
+              {sidebarExpanded && <span className="brand-text">let's grow</span>}
             </Link>
             <button
-              className="btn btn-sm btn-light d-none d-md-flex"
+              className="sidebar-collapse-btn d-none d-md-flex"
               onClick={toggleSidebar}
               aria-label={sidebarExpanded ? "Collapse sidebar" : "Expand sidebar"}
             >
@@ -312,152 +299,126 @@ const Sidebar = ({
           </div>
 
           {/* Search */}
-          <div className="p-3">
-            <div className="position-relative">
-              <Search
-                className="position-absolute"
-                style={{
-                  top: "10px",
-                  left: sidebarExpanded ? "12px" : "8px",
-                  color: "#6c757d",
-                }}
-                size={16}
-              />
+          <div className="sidebar-search">
+            <div className="search-wrapper">
+              <Search className="search-icon" size={16} />
               <input
                 type="text"
                 placeholder={sidebarExpanded ? "Search..." : ""}
-                className="form-control"
-                style={{
-                  paddingLeft: sidebarExpanded ? "35px" : "30px",
-                }}
+                className="search-input"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
 
-          {/* Main Navigation */}
-          <nav className="sidebar-nav flex-grow-1">
-            {/* Role-based badge */}
+          {/* Navigation */}
+          <nav className="sidebar-nav">
+            {/* Role Badge */}
             {sidebarExpanded && userData?.role && (
-              <div className="px-3 pb-2">
-                <span className={`badge ${
-                  userData.role === 'admin' ? 'bg-danger' : 
-                  userData.role === 'investor' ? 'bg-primary' : 'bg-success'
-                }`}>
+              <div className="role-badge-container">
+                <span
+                  className={`role-badge ${
+                    userData.role === "admin"
+                      ? "role-admin"
+                      : userData.role === "investor"
+                        ? "role-investor"
+                        : "role-entrepreneur"
+                  }`}
+                >
                   {userData.role.charAt(0).toUpperCase() + userData.role.slice(1)}
                 </span>
               </div>
             )}
 
             {/* Main Menu Items */}
-            {filteredMainItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={`btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
-                  activeMenuItem === item.name ? "active-menu-item" : ""
-                }`}
-                onClick={() => setActiveMenuItem(item.name)}
-              >
-                <div className="d-flex align-items-center gap-3">
-                  <item.icon size={20} className={activeMenuItem === item.name ? "text-success" : "text-secondary"} />
-                  {sidebarExpanded && <span>{item.name}</span>}
-                </div>
-              </Link>
-            ))}
+            <div className="nav-section">
+              {filteredMainItems.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={`nav-item ${activeMenuItem === item.name ? "nav-item-active" : ""}`}
+                  onClick={() => setActiveMenuItem(item.name)}
+                >
+                  <item.icon size={20} className="nav-icon" />
+                  {sidebarExpanded && <span className="nav-text">{item.name}</span>}
+                </Link>
+              ))}
+            </div>
 
             {/* Additional Menu Items */}
             {filteredAdditionalItems.length > 0 && (
-              <>
-                {sidebarExpanded && <div className="px-3 py-2 mt-3 small text-muted">GROWTH & PROGRESS</div>}
+              <div className="nav-section">
+                {sidebarExpanded && <div className="nav-section-title">GROWTH & PROGRESS</div>}
                 {filteredAdditionalItems.map((item) => (
                   <Link
                     key={item.name}
                     to={item.path}
-                    className={`btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
-                      activeMenuItem === item.name ? "active-menu-item" : ""
-                    }`}
+                    className={`nav-item ${activeMenuItem === item.name ? "nav-item-active" : ""}`}
                     onClick={() => setActiveMenuItem(item.name)}
                   >
-                    <div className="d-flex align-items-center gap-3">
-                      <item.icon size={20} className={activeMenuItem === item.name ? "text-success" : "text-secondary"} />
-                      {sidebarExpanded && <span>{item.name}</span>}
-                    </div>
+                    <item.icon size={20} className="nav-icon" />
+                    {sidebarExpanded && <span className="nav-text">{item.name}</span>}
                   </Link>
                 ))}
-              </>
-            )}
-
-            {/* No search results */}
-            {searchQuery && filteredMainItems.length === 0 && filteredAdditionalItems.length === 0 && sidebarExpanded && (
-              <div className="px-3 py-4 text-center text-muted">
-                <Search size={32} className="mb-2 opacity-50" />
-                <p className="small">No menu items found</p>
               </div>
             )}
+
+            {/* No Results */}
+            {searchQuery &&
+              filteredMainItems.length === 0 &&
+              filteredAdditionalItems.length === 0 &&
+              sidebarExpanded && (
+                <div className="no-results">
+                  <Search size={32} className="no-results-icon" />
+                  <p className="no-results-text">No menu items found</p>
+                </div>
+              )}
           </nav>
 
-          {/* User Profile and Logout Section */}
-          <div className="border-top mt-auto">
-            {/* Profile Section */}
+          {/* Footer */}
+          <div className="sidebar-footer">
+            {/* Profile */}
             <Link
-              to="/profile"
-              className={`btn btn-link text-decoration-none text-dark w-100 text-start py-2 px-3 border-0 menu-item ${
-                activeMenuItem === "Profile" ? "active-menu-item" : ""
-              }`}
+              to="/user-profile"
+              className={`nav-item ${activeMenuItem === "Profile" ? "nav-item-active" : ""}`}
               onClick={() => setActiveMenuItem("Profile")}
             >
-              <div className="d-flex align-items-center gap-3">
-                <div
-                  className="d-flex align-items-center justify-content-center bg-success text-white rounded-circle"
-                  style={{ width: "20px", height: "20px", fontSize: "12px" }}
-                >
-                  {userData?.avatar ? (
-                    <img
-                      src={userData.avatar}
-                      alt="Profile"
-                      className="rounded-circle"
-                      style={{ width: "20px", height: "20px" }}
-                      onError={(e) => {
-                        e.target.onerror = null
-                        e.target.style.display = 'none'
-                        e.target.parentElement.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>'
-                      }}
-                    />
-                  ) : (
-                    <User size={12} />
-                  )}
-                </div>
-                {sidebarExpanded && userData && (
-                  <div className="d-flex flex-column">
-                    <span className="small fw-medium">{userData.name}</span>
-                    <span className="text-muted" style={{ fontSize: "0.75rem" }}>
-                      {userData.email}
-                    </span>
+              <div className="profile-avatar">
+                {userData?.profileImage?.url ? (
+                  <img
+                    src={userData.profileImage.url || "/placeholder.svg"}
+                    alt="Profile"
+                    className="profile-image"
+                    onError={(e) => {
+                      e.target.onerror = null
+                      e.target.src = "https://via.placeholder.com/32"
+                    }}
+                  />
+                ) : (
+                  <div className="profile-placeholder">
+                    <User size={16} />
                   </div>
                 )}
               </div>
+              {sidebarExpanded && userData && (
+                <div className="profile-info">
+                  <span className="profile-name">{userData.name}</span>
+                  <span className="profile-email">{userData.email}</span>
+                </div>
+              )}
             </Link>
 
-            {/* Logout Button */}
-            <button
-              className="btn btn-link text-decoration-none text-danger w-100 text-start py-2 px-3 border-0 menu-item"
-              onClick={handleLogout}
-              disabled={isLoggingOut}
-            >
-              <div className="d-flex align-items-center gap-3">
-                {isLoggingOut ? (
-                  <div className="spinner-border spinner-border-sm text-danger" role="status">
-                    <span className="visually-hidden">Logging out...</span>
-                  </div>
-                ) : (
-                  <LogOut size={20} />
-                )}
-                {sidebarExpanded && (
-                  <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
-                )}
-              </div>
+            {/* Logout */}
+            <button className="nav-item nav-item-logout" onClick={handleLogout} disabled={isLoggingOut}>
+              {isLoggingOut ? (
+                <div className="spinner-border spinner-border-sm text-danger" role="status">
+                  <span className="visually-hidden">Logging out...</span>
+                </div>
+              ) : (
+                <LogOut size={20} className="nav-icon" />
+              )}
+              {sidebarExpanded && <span className="nav-text">{isLoggingOut ? "Logging out..." : "Logout"}</span>}
             </button>
           </div>
         </div>

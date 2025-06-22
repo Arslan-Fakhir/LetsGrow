@@ -37,23 +37,22 @@ const StartupDetails = () => {
           `${import.meta.env.VITE_API_BASE_URL}/api/startups/${id}`
         )
         
-        // Map the response data to match our expected structure
         const mappedData = {
           id: response.data._id,
           name: response.data.startupName,
           entrepreneur: response.data.entrepreneurId?.name || "Unknown",
           industry: response.data.industry,
-          email: response.data.entrepreneurId?.email || "",
-          phone: response.data.entrepreneurId?.phone || "",
-          location: response.data.location || "",
+          email: response.data.entrepreneurId?.email || "N/A",
+          phone: response.data.entrepreneurId?.contactNumber || "N/A",
+          location: response.data.entrepreneurId?.location || "N/A",
           submissionDate: response.data.createdAt,
           fundingRequired: response.data.fundingRequired?.toLocaleString() || "N/A",
           description: response.data.description,
           rating: response.data.rating || 0,
-          image: response.data.imageUrl || "/placeholder.svg",
+          image: response.data.image?.url || "",
           stage: response.data.stage,
           teamSize: response.data.teamSize || "N/A",
-          revenue: response.data.revenue || "N/A",
+          revenue: response.data.revenue ? `$${response.data.revenue.toLocaleString()}` : "N/A",
           status: response.data.status || "N/A"
         }
 
@@ -71,7 +70,6 @@ const StartupDetails = () => {
 
   const handleBack = () => navigate(-1)
   const handleInvest = () => console.log("Invest in:", startup.name)
-  const handleContact = () => console.log("Contact:", startup.entrepreneur)
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A"
@@ -117,15 +115,12 @@ const StartupDetails = () => {
     <div className="startup-details-container">
       <div className="startup-details-wrapper">
         <div className="startup-details-content">
-          {/* Back Button */}
           <button className="back-button" onClick={handleBack}>
             <ArrowLeft size={20} />
             <span>Back to Browse</span>
           </button>
 
-          {/* Main Card */}
           <div className="startup-details-card">
-            {/* Header Section */}
             <div className="startup-details-header">
               <div className="header-content">
                 <div className="header-left">
@@ -140,15 +135,15 @@ const StartupDetails = () => {
                     )}
                   </div>
                 </div>
-                <div className="header-right">
-                  <img src={startup.image} alt={startup.name} className="startup-image" />
-                </div>
+                {startup.image && (
+                  <div className="header-right">
+                    <img src={startup.image} alt={startup.name} className="startup-image" />
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Body Section */}
             <div className="startup-details-body">
-              {/* Entrepreneur Info Section */}
               <div className="section">
                 <h2 className="section-title">
                   <User className="section-icon" />
@@ -192,7 +187,6 @@ const StartupDetails = () => {
 
               <hr className="section-separator" />
 
-              {/* Business Info Section */}
               <div className="section">
                 <h2 className="section-title">
                   <Building className="section-icon" />
@@ -241,7 +235,6 @@ const StartupDetails = () => {
 
               <hr className="section-separator" />
 
-              {/* Description Section */}
               <div className="section">
                 <h2 className="section-title">
                   <FileText className="section-icon" />
@@ -252,31 +245,10 @@ const StartupDetails = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="action-buttons">
                 <button className="primary-action" onClick={handleInvest}>
                   <DollarSign className="button-icon" />
                   Invest Now
-                </button>
-                <button className="secondary-action" onClick={handleContact}>
-                  <Mail className="button-icon" />
-                  Contact Entrepreneur
-                </button>
-              </div>
-
-              {/* Additional Actions */}
-              <div className="additional-actions">
-                <button className="additional-button">
-                  <FileText size={16} />
-                  Download Pitch Deck
-                </button>
-                <button className="additional-button">
-                  <Star size={16} />
-                  Add to Watchlist
-                </button>
-                <button className="additional-button">
-                  <User size={16} />
-                  View Team
                 </button>
               </div>
             </div>

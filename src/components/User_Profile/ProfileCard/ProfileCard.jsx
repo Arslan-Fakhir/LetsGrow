@@ -5,30 +5,29 @@ import ProfileForm from "../ProfileForm/ProfileForm"
 import ProfileHeader from "../ProfileHeader/ProfileHeader"
 import "./ProfileCard.css"
 
-const ProfileCard = ({ userData, onUpdate }) => {
+const ProfileCard = ({ userData, onUpdate, error }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
 
-  const handleSubmit = (formData) => {
-    // Call the parent component's update function
-    onUpdate(formData)
-
-    // Show success message
-    setSaveSuccess(true)
-
-    // Hide success message after 3 seconds
-    setTimeout(() => {
-      setSaveSuccess(false)
-    }, 3000)
-
-    // Exit edit mode
-    setIsEditing(false)
+  const handleSubmit = async (formData) => {
+    try {
+      await onUpdate(formData)
+      setSaveSuccess(true)
+      setTimeout(() => setSaveSuccess(false), 3000)
+      setIsEditing(false)
+    } catch (err) {
+      console.error('Update error:', err)
+    }
   }
 
   return (
     <div className="card border-0 shadow-sm profile-card">
       <div className="card-body p-4">
-        <ProfileHeader userData={userData} isEditing={isEditing} onEditClick={() => setIsEditing(true)} />
+        <ProfileHeader 
+          userData={userData} 
+          isEditing={isEditing} 
+          onEditClick={() => setIsEditing(true)} 
+        />
 
         <ProfileForm
           userData={userData}
@@ -37,12 +36,15 @@ const ProfileCard = ({ userData, onUpdate }) => {
           onSubmit={handleSubmit}
         />
 
-        {/* Success Message */}
         {saveSuccess && (
-          <div className="save-success-message">
-            <div className="alert alert-success d-flex align-items-center" role="alert">
-              <div>Profile updated successfully!</div>
-            </div>
+          <div className="alert alert-success mt-3">
+            Profile updated successfully!
+          </div>
+        )}
+
+        {error && (
+          <div className="alert alert-danger mt-3">
+            {error}
           </div>
         )}
       </div>
