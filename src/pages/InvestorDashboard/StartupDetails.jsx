@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { ArrowLeft, User, Building, Mail, Calendar, DollarSign, FileText, Star, Phone, MapPin } from "lucide-react"
 import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
+import { loadStripe } from '@stripe/stripe-js';
+import { useAuth } from "../../context/AuthContext"
 import "./StartupDetails.css"
 
 const StarRating = ({ rating }) => {
@@ -28,6 +30,7 @@ const StartupDetails = () => {
   const [startup, setStartup] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const { auth } = useAuth()
 
   useEffect(() => {
     const fetchStartupDetails = async () => {
@@ -47,9 +50,10 @@ const StartupDetails = () => {
           location: response.data.entrepreneurId?.location || "N/A",
           submissionDate: response.data.createdAt,
           fundingRequired: response.data.fundingRequired?.toLocaleString() || "N/A",
+          fundingReceived: response.data.fundingReceived?.toLocaleString() || "0",
           description: response.data.description,
           rating: response.data.rating || 0,
-          image: response.data.image?.url || "",
+          image: response.data.startupImage?.url || "",
           stage: response.data.stage,
           teamSize: response.data.teamSize || "N/A",
           revenue: response.data.revenue ? `$${response.data.revenue.toLocaleString()}` : "N/A",
@@ -69,9 +73,74 @@ const StartupDetails = () => {
   }, [id])
 
   const handleBack = () => navigate(-1)
-  const handleInvest = () => console.log("Invest in:", startup.name)
 
-  const formatDate = (dateString) => {
+  const makePayment = async () => {
+  if (!auth.user) {
+    alert('Please login to make an investment');
+    navigate('/login');
+    return;
+  }
+
+  try {
+    const amount = prompt(
+      `Startup: ${startup.name}\n` +
+      `Funding Required: $${startup.fundingRequired}\n` +
+      `Funding Received: $${startup.fundingReceived}\n\n` +
+      `Enter your investment amount (USD):`
+    );
+
+    if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+      alert('Please enter a valid amount greater than 0');
+      return;
+    }
+
+    // Create checkout session
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/api/investment/create-checkout-session`,
+      {
+        amount: parseFloat(amount),
+        startupId: startup.id,
+        startupName: startup.name,
+        image: startup.image,
+        currency: 'usd'
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      }
+    );
+
+    
+    ///////////////////////////////////////
+    console.log('Frontend recieved session id: ',response.data.data.id)
+    ///////////////////////////////////////
+
+
+    // Initialize Stripe and redirect
+    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+
+    const { error } = await stripe.redirectToCheckout({
+      sessionId: response.data.data.id // Ensure correct response structure
+    });
+    
+    if (error) {
+      throw error;
+    }
+
+  } catch (error) {
+    console.error('Payment error:', error);
+    alert(
+      `Payment failed: ${error.message}\n\n` +
+      'For testing, use card: 4242 4242 4242 4242\n' +
+      'Any future date, any CVC, any ZIP'
+    );
+  }
+};
+
+
+    
+  function formatDate(dateString) {
     if (!dateString) return "N/A"
     const options = { year: "numeric", month: "long", day: "numeric" }
     return new Date(dateString).toLocaleDateString("en-US", options)
@@ -246,7 +315,7 @@ const StartupDetails = () => {
               </div>
 
               <div className="action-buttons">
-                <button className="primary-action" onClick={handleInvest}>
+                <button className="primary-action" onClick={makePayment}>
                   <DollarSign className="button-icon" />
                   Invest Now
                 </button>

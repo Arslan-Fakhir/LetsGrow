@@ -17,6 +17,9 @@ import ManageIdeas from "./pages/ManageIdeas/ManageIdeas";
 import ManageInvestments from "./pages/ManageInvestments/ManageInvestments";
 import UserProfile from "./pages/UserProfile/UserProfile";
 import Admin from "./pages/Admin/Admin";
+import Success from "./pages/InvestorDashboard/PaymentSuccess";
+import Cancel from "./pages/InvestorDashboard/PaymentCancel";
+
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import "./App.css";
 
@@ -167,6 +170,16 @@ function App() {
                 <Route path="/manage-investment" element={
                   <RoleProtectedRoute allowedRoles={['investor', 'admin']}>
                     <ManageInvestments />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/success" element={
+                  <RoleProtectedRoute allowedRoles={['investor']}>
+                    <Success />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/cancel" element={
+                  <RoleProtectedRoute allowedRoles={['investor']}>
+                    <Cancel />
                   </RoleProtectedRoute>
                 } />
               </Routes>
