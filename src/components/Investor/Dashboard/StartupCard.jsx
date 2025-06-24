@@ -18,7 +18,7 @@ const StartupCard = ({ startup, onViewDetails }) => {
       <div className="startup-image-container">
         <img
           src={startup.image || "/placeholder.svg?height=192&width=384"}
-          alt={startup.entrepreneur.name}
+          alt={startup.name}
           className="startup-image"
         />
         <div className="startup-status">

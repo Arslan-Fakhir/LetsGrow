@@ -103,6 +103,7 @@ const StartupDetails = () => {
         investorId:auth.user._id,  // Add investor id who is trying to initiate checkout session
         startupName: startup.name,
         image: startup.image,
+        fundingRecieved:startup.fundingReceived,
         currency: 'usd'
       },
       {

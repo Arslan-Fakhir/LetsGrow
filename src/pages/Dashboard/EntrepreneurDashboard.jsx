@@ -81,27 +81,7 @@ const EntrepreneurDashboard = () => {
           </div>
         </div>
 
-        {/* Additional Insights */}
-        <div className="row g-4 mt-4">
-          <div className="col-12">
-            <div className="card border-0 shadow-sm">
-              <div className="card-body p-4">
-                <div className="row align-items-center">
-                  <div className="col-md-8">
-                    <h4 className="mb-2">🚀 Ready for the next step?</h4>
-                    <p className="text-muted mb-0">
-                      Your startup is showing great progress. Consider exploring advanced features like investor
-                      matching, advanced analytics, and strategic partnerships.
-                    </p>
-                  </div>
-                  <div className="col-md-4 text-md-end">
-                    <button className="btn btn-primary btn-lg">Explore Premium Features</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+       
       </div>
     </div>
   )
