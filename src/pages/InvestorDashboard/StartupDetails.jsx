@@ -100,6 +100,7 @@ const StartupDetails = () => {
       {
         amount: parseFloat(amount),
         startupId: startup.id,
+        investorId:auth.user._id,  // Add investor id who is trying to initiate checkout session
         startupName: startup.name,
         image: startup.image,
         currency: 'usd'
@@ -113,9 +114,9 @@ const StartupDetails = () => {
 
     
     ///////////////////////////////////////
-    console.log('Frontend recieved session id: ',response.data.data.id)
+    //console.log('Frontend recieved session id: ',response.data.data.id)
+    //await new Promise(resolve => setTimeout(resolve, 5000)); // 5s wait
     ///////////////////////////////////////
-
 
     // Initialize Stripe and redirect
     const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
@@ -123,6 +124,7 @@ const StartupDetails = () => {
     const { error } = await stripe.redirectToCheckout({
       sessionId: response.data.data.id // Ensure correct response structure
     });
+
     
     if (error) {
       throw error;

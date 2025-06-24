@@ -11,7 +11,6 @@ const StatsSection = ({ stats }) => {
               <div className="stat-info">
                 <p className="stat-title">{stat.title}</p>
                 <p className="stat-value">{stat.value}</p>
-                <p className={`stat-change ${stat.color}`}>{stat.change} from last month</p>
               </div>
               <div className={`stat-icon-container ${stat.color}`}>
                 <span className="stat-icon">

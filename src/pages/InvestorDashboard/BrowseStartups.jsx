@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Card, Button, Spinner } from "react-bootstrap";
+import { ArrowLeft } from "lucide-react"; // Add this import
 import axios from "axios";
 import "./BrowseStartups.css";
 
@@ -43,6 +44,8 @@ const BrowseStartups = () => {
     navigate(`/viewDetails/${startupId}`);
   };
 
+  const handleBack = () => navigate(-1); // Add this function
+
   if (loading) {
     return (
       <Container className="d-flex justify-content-center align-items-center min-vh-100">
@@ -62,6 +65,12 @@ const BrowseStartups = () => {
   return (
     <Container fluid className="min-vh-100 bg-light py-5">
       <Container>
+        {/* Add the back button here */}
+        <button className="back-button mb-4" onClick={handleBack}>
+          <ArrowLeft size={20} />
+          <span>Back to Dashboard</span>
+        </button>
+
         <h1 className="text-center mb-5">🌱 Browse Startup Ideas</h1>
 
         <Row className="g-4">
