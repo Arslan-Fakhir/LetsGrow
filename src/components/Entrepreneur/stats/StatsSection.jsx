@@ -1,15 +1,15 @@
 import React from 'react';
 import StatCard from './StatCard';
-import { Building, Users, Calendar, TrendingUp } from 'lucide-react';
+import { Lightbulb, Users, CheckCircle, DollarSign } from 'lucide-react';
 
 const StatsSection = () => {
   return (
     <div className="row g-4 mb-4">
       <div className="col-md-6 col-lg-3">
         <StatCard
-          icon={Building}
-          title="Startup Status"
-          value="Early Stage"
+          icon={Lightbulb}
+          title="Total Startup Ideas"
+          value={4}
           bgColor="bg-primary bg-opacity-10"
           iconColor="text-primary"
         />
@@ -18,25 +18,25 @@ const StatsSection = () => {
         <StatCard
           icon={Users}
           title="Team Members"
-          value={12}
+          value={1}
           bgColor="bg-success bg-opacity-10"
           iconColor="text-success"
         />
       </div>
       <div className="col-md-6 col-lg-3">
         <StatCard
-          icon={Calendar}
-          title="Active Days"
-          value={45}
+          icon={CheckCircle}
+          title="Total Approved Ideas"
+          value={3}
           bgColor="bg-warning bg-opacity-10"
           iconColor="text-warning"
         />
       </div>
       <div className="col-md-6 col-lg-3">
         <StatCard
-          icon={TrendingUp}
-          title="Growth Rate"
-          value="+25%"
+          icon={DollarSign}
+          title="Total Funding Received"
+          value="$2000"
           bgColor="bg-info bg-opacity-10"
           iconColor="text-info"
         />

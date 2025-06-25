@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Sidebar from "./components/Sidebar/Sidebar"; 
 import TopNavbar from "./components/TopNavbar/TopNavbar"; 
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
-import EntrepreneurDashboard from "./pages/Dashboard/EntrepreneurDashboard";
+//                    Entrepreneur                    //
+import EntrepreneurDashboard from "./pages/EntrepreneurDashboard/EntrepreneurDashboard";
+import MyStartup from "./pages/MyStartup/StartupPage";
 import StartupForm from "./components/Entrepreneur/forms/StartupForm";
 import ManpowerForm from "./components/Entrepreneur/forms/ManpowerForm";
+import MyStartupDetails from "./pages/MyStartup/MyStartupDetails";
+import EditStartupForm from "./pages/MyStartup/EditStartupForm";
+
+//                    Investor                    //
 import InvestorDashboard from "./pages/InvestorDashboard/InvestorDashboard";
 import Transaction from "./pages/InvestorDashboard/Transaction";
 import BrowseStartups from "./pages/InvestorDashboard/BrowseStartups";
@@ -26,30 +32,37 @@ import "./App.css";
 const RoleProtectedRoute = ({ children, allowedRoles }) => {
   const { auth, isAdmin, isEntrepreneur, isInvestor } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+  const [checkedAuth, setCheckedAuth] = useState(false);
 
-  if (auth.loading) {
+  useEffect(() => {
+    if (auth.loading) return;
+
+    if (!auth.user) {
+      navigate('/login', { state: { from: location }, replace: true });
+      return;
+    }
+
+    const hasRequiredRole = allowedRoles.some(role => {
+      if (role === 'admin') return isAdmin();
+      if (role === 'entrepreneur') return isEntrepreneur();
+      if (role === 'investor') return isInvestor();
+      return false;
+    });
+
+    if (!hasRequiredRole) {
+      const defaultRoute = isAdmin() ? '/admin' :
+                         isEntrepreneur() ? '/dashboard' :
+                         '/investor-dashboard';
+      toast.error('You do not have permission to access this page');
+      navigate(defaultRoute, { replace: true });
+    }
+
+    setCheckedAuth(true);
+  }, [auth, allowedRoles, isAdmin, isEntrepreneur, isInvestor, location, navigate]);
+
+  if (auth.loading || !checkedAuth) {
     return <div className="loading-spinner">Loading...</div>;
-  }
-
-  if (!auth.user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-
-  // Check if user has any of the allowed roles
-  const hasRequiredRole = allowedRoles.some(role => {
-    if (role === 'admin') return isAdmin();
-    if (role === 'entrepreneur') return isEntrepreneur();
-    if (role === 'investor') return isInvestor();
-    return false;
-  });
-
-  if (!hasRequiredRole) {
-    // Redirect to default dashboard based on their actual role
-    const defaultRoute = isAdmin() ? '/admin' :
-                       isEntrepreneur() ? '/dashboard' :
-                       '/investor-dashboard';
-    toast.error('You do not have permission to access this page');
-    return <Navigate to={defaultRoute} replace />;
   }
 
   return children;
@@ -124,6 +137,21 @@ function App() {
                 <Route path="/request-manpower" element={
                   <RoleProtectedRoute allowedRoles={['entrepreneur']}>
                     <ManpowerForm />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/my-startup" element={
+                  <RoleProtectedRoute allowedRoles={['entrepreneur']}>
+                    <MyStartup />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/my-startup-details/:id" element={
+                  <RoleProtectedRoute allowedRoles={['entrepreneur']}>
+                    <MyStartupDetails />
+                  </RoleProtectedRoute>
+                } />
+                <Route path="/edit-startup/:id" element={
+                  <RoleProtectedRoute allowedRoles={['entrepreneur']}>
+                    <EditStartupForm/>
                   </RoleProtectedRoute>
                 } />
 

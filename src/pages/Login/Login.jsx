@@ -1,11 +1,12 @@
 // pages/Login/Login.js
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Card, InputGroup } from "react-bootstrap";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from 'react-toastify';
 import "./Login.css";
 import logo from "../../assets/logo2.svg";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -14,6 +15,11 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -88,13 +94,22 @@ const Login = () => {
 
                 <Form.Group className="mb-4">
                   <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password"
-                    required
-                  />
+                  <InputGroup>
+                    <Form.Control
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      required
+                    />
+                    <Button
+                      variant="outline-secondary"
+                      onClick={togglePasswordVisibility}
+                      className="password-toggle"
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </Button>
+                  </InputGroup>
                   <div className="text-end mt-2">
                     <Link to="/forgot-password" className="forgot-password-link text-custom text-decoration-none small">
                       Forgot Password?

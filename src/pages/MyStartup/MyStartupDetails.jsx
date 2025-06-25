@@ -1,30 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ArrowLeft, User, Building, Mail, Calendar, DollarSign, FileText, Star, Phone, MapPin } from "lucide-react"
+import { ArrowLeft, User, Building, Mail, Calendar, DollarSign, FileText, Star, Phone, MapPin, Edit, Trash2 } from "lucide-react"
 import { useNavigate, useParams } from "react-router-dom"
 import axios from "axios"
-import { loadStripe } from '@stripe/stripe-js';
 import { useAuth } from "../../context/AuthContext"
-import "./StartupDetails.css"
+import "./MyStartupDetails.css"
 
-const StarRating = ({ rating }) => {
-  return (
-    <div className="star-rating">
-      {[...Array(5)].map((_, index) => (
-        <Star
-          key={index}
-          size={20}
-          className={`star ${index < rating ? "star-filled" : "star-empty"}`}
-          fill={index < rating ? "#fbbf24" : "none"}
-        />
-      ))}
-      <span className="rating-text">({rating}/5)</span>
-    </div>
-  )
-}
-
-const StartupDetails = () => {
+const MyStartupDetails = () => {
   const navigate = useNavigate()
   const { id } = useParams()
   const [startup, setStartup] = useState(null)
@@ -74,74 +57,31 @@ const StartupDetails = () => {
 
   const handleBack = () => navigate(-1)
 
-  const makePayment = async () => {
-  if (!auth.user) {
-    alert('Please login to make an investment');
-    navigate('/login');
-    return;
+  const handleEdit = () => {
+    navigate(`/edit-startup/${id}`)
   }
 
-  try {
-    const amount = prompt(
-      `Startup: ${startup.name}\n` +
-      `Funding Required: $${startup.fundingRequired}\n` +
-      `Funding Received: $${startup.fundingReceived}\n\n` +
-      `Enter your investment amount (USD):`
-    );
-
-    if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
-      alert('Please enter a valid amount greater than 0');
-      return;
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this startup? This action cannot be undone.")) {
+      return
     }
 
-    // Create checkout session
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_BASE_URL}/api/investment/create-checkout-session`,
-      {
-        amount: parseFloat(amount),
-        startupId: startup.id,
-        investorId:auth.user._id,  // Add investor id who is trying to initiate checkout session
-        startupName: startup.name,
-        image: startup.image,
-        currency: 'usd'
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_API_BASE_URL}/api/startups/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
         }
-      }
-    );
-
-    
-    ///////////////////////////////////////
-    //console.log('Frontend received session id: ',response.data.data.id)
-    //await new Promise(resolve => setTimeout(resolve, 5000)); // 5s wait
-    ///////////////////////////////////////
-
-    // Initialize Stripe and redirect
-    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-
-    const { error } = await stripe.redirectToCheckout({
-      sessionId: response.data.data.id // Ensure correct response structure
-    });
-
-    
-    if (error) {
-      throw error;
+      )
+      navigate('/my-startup')
+    } catch (error) {
+      console.error('Delete failed:', error)
+      alert('Failed to delete startup. Please try again.')
     }
-
-  } catch (error) {
-    console.error('Payment error:', error);
-    alert(
-      `Payment failed: ${error.message}\n\n` +
-      'For testing, use card: 4242 4242 4242 4242\n' +
-      'Any future date, any CVC, any ZIP'
-    );
   }
-};
 
-
-    
   function formatDate(dateString) {
     if (!dateString) return "N/A"
     const options = { year: "numeric", month: "long", day: "numeric" }
@@ -188,7 +128,7 @@ const StartupDetails = () => {
         <div className="startup-details-content">
           <button className="back-button" onClick={handleBack}>
             <ArrowLeft size={20} />
-            <span>Back to Browse</span>
+            <span>Back </span>
           </button>
 
           <div className="startup-details-card">
@@ -297,8 +237,8 @@ const StartupDetails = () => {
                       <p className="info-value">{startup.revenue}</p>
                     </div>
                     <div className="info-item">
-                      <label className="info-label">Rating</label>
-                      <StarRating rating={startup.rating} />
+                      <label className="info-label">Status</label>
+                      <p className="info-value">{startup.status}</p>
                     </div>
                   </div>
                 </div>
@@ -317,9 +257,13 @@ const StartupDetails = () => {
               </div>
 
               <div className="action-buttons">
-                <button className="primary-action" onClick={makePayment}>
-                  <DollarSign className="button-icon" />
-                  Invest Now
+                <button className="edit-action" onClick={handleEdit}>
+                  <Edit className="button-icon" />
+                  Edit Startup
+                </button>
+                <button className="delete-action" onClick={handleDelete}>
+                  <Trash2 className="button-icon" />
+                  Delete Startup
                 </button>
               </div>
             </div>
@@ -330,4 +274,4 @@ const StartupDetails = () => {
   )
 }
 
-export default StartupDetails
+export default MyStartupDetails

@@ -8,16 +8,38 @@ import ActivitySection from '../../components/Entrepreneur/activity/ActivitySect
 import "./EntrepreneurDashboard.css"
 
 const EntrepreneurDashboard = () => {
-  const [userName, setUserName] = useState("Alex Johnson")
+  const [userName, setUserName] = useState("")
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
+    const fetchUserProfile = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/user/profile`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
 
-    return () => clearTimeout(timer)
+        if (!response.ok) {
+          throw new Error('Failed to fetch user profile');
+        }
+
+        const data = await response.json();
+        //console.log(data.data.name)
+        setUserName(data.data.name); // Set the actual user's name from the API response
+        
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        // You might want to handle this error, perhaps by redirecting to login
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserProfile();
   }, [])
 
   if (isLoading) {
@@ -80,8 +102,6 @@ const EntrepreneurDashboard = () => {
             </div>
           </div>
         </div>
-
-       
       </div>
     </div>
   )
