@@ -195,7 +195,7 @@ const Sidebar = ({ activeMenuItem, setActiveMenuItem, sidebarExpanded, toggleSid
                   className="rounded-circle w-100 h-100"
                   style={{ objectFit: "cover" }}
                   onError={(e) => {
-                    e.target.src = "https://via.placeholder.com/40"
+                    e.target.src = ""
                   }}
                 />
               </div>

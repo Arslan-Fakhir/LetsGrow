@@ -27,11 +27,14 @@ const StartupPage = () => {
   const navigate = useNavigate();
   const { auth } = useAuth();
 
+  
+
   useEffect(() => {
     const fetchStartups = async () => {
       try {
         setLoading(true);
         if (auth.user?._id && auth.user?.role === "entrepreneur") {
+          console.log("user id: ",auth.user._id)
           const response = await axios.get(
             `${import.meta.env.VITE_API_BASE_URL}/api/startups/entrepreneur/${auth.user._id}`,
             {

@@ -6,15 +6,14 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import TopNavbar from "./components/TopNavbar/TopNavbar"; 
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Signup/Signup";
-//                    Entrepreneur                    //
+// Entrepreneur imports
 import EntrepreneurDashboard from "./pages/EntrepreneurDashboard/EntrepreneurDashboard";
 import MyStartup from "./pages/MyStartup/StartupPage";
 import StartupForm from "./components/Entrepreneur/forms/StartupForm";
 import ManpowerForm from "./components/Entrepreneur/forms/ManpowerForm";
 import MyStartupDetails from "./pages/MyStartup/MyStartupDetails";
 import EditStartupForm from "./pages/MyStartup/EditStartupForm";
-
-//                    Investor                    //
+// Investor imports
 import InvestorDashboard from "./pages/InvestorDashboard/InvestorDashboard";
 import Transaction from "./pages/InvestorDashboard/Transaction";
 import BrowseStartups from "./pages/InvestorDashboard/BrowseStartups";
@@ -25,8 +24,9 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 import Admin from "./pages/Admin/Admin";
 import Success from "./pages/InvestorDashboard/PaymentSuccess";
 import Cancel from "./pages/InvestorDashboard/PaymentCancel";
-
+import Chatbot from "./pages/Chatbot/Chatbot";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext"; // Make sure this path is correct
 import "./App.css";
 
 const RoleProtectedRoute = ({ children, allowedRoles }) => {
@@ -110,111 +110,117 @@ function App() {
 
   return (
     <AuthProvider>
-      <Router>
-        <ToastContainer position="top-right" autoClose={5000} />
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          
-          {/* All protected routes */}
-          <Route path="/*" element={
-            <MainLayout 
-              toggleSidebar={toggleSidebar} 
-              sidebarExpanded={sidebarExpanded}
-            >
-              <Routes>
-                {/* Entrepreneur Routes */}
-                <Route path="/dashboard" element={
-                  <RoleProtectedRoute allowedRoles={['entrepreneur']}>
-                    <EntrepreneurDashboard />
-                  </RoleProtectedRoute>
-                } />
-                <Route path="/apply-startup" element={
-                  <RoleProtectedRoute allowedRoles={['entrepreneur']}>
-                    <StartupForm />
-                  </RoleProtectedRoute>
-                } />
-                <Route path="/request-manpower" element={
-                  <RoleProtectedRoute allowedRoles={['entrepreneur']}>
-                    <ManpowerForm />
-                  </RoleProtectedRoute>
-                } />
-                <Route path="/my-startup" element={
-                  <RoleProtectedRoute allowedRoles={['entrepreneur']}>
-                    <MyStartup />
-                  </RoleProtectedRoute>
-                } />
-                <Route path="/my-startup-details/:id" element={
-                  <RoleProtectedRoute allowedRoles={['entrepreneur']}>
-                    <MyStartupDetails />
-                  </RoleProtectedRoute>
-                } />
-                <Route path="/edit-startup/:id" element={
-                  <RoleProtectedRoute allowedRoles={['entrepreneur']}>
-                    <EditStartupForm/>
-                  </RoleProtectedRoute>
-                } />
+      <ThemeProvider>
+        <Router>
+          <ToastContainer position="top-right" autoClose={5000} />
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            
+            <Route path="/*" element={
+              <MainLayout 
+                toggleSidebar={toggleSidebar} 
+                sidebarExpanded={sidebarExpanded}
+              >
+                <Routes>
+                  {/* Entrepreneur Routes */}
+                  <Route path="/dashboard" element={
+                    <RoleProtectedRoute allowedRoles={['entrepreneur']}>
+                      <EntrepreneurDashboard />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/apply-startup" element={
+                    <RoleProtectedRoute allowedRoles={['entrepreneur']}>
+                      <StartupForm />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/request-manpower" element={
+                    <RoleProtectedRoute allowedRoles={['entrepreneur']}>
+                      <ManpowerForm />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/my-startup" element={
+                    <RoleProtectedRoute allowedRoles={['entrepreneur']}>
+                      <MyStartup />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/my-startup-details/:id" element={
+                    <RoleProtectedRoute allowedRoles={['entrepreneur']}>
+                      <MyStartupDetails />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/edit-startup/:id" element={
+                    <RoleProtectedRoute allowedRoles={['entrepreneur']}>
+                      <EditStartupForm/>
+                    </RoleProtectedRoute>
+                  } />
 
-                {/* Investor Routes */}
-                <Route path="/investor-dashboard" element={
-                  <RoleProtectedRoute allowedRoles={['investor']}>
-                    <InvestorDashboard />
-                  </RoleProtectedRoute>
-                } />
-                <Route path="/transaction" element={
-                  <RoleProtectedRoute allowedRoles={['investor']}>
-                    <Transaction />
-                  </RoleProtectedRoute>
-                } />
-                <Route path="/browseStartups" element={
-                  <RoleProtectedRoute allowedRoles={['investor']}>
-                    <BrowseStartups />
-                  </RoleProtectedRoute>
-                } />
-                <Route path="/viewDetails/:id" element={
-                  <RoleProtectedRoute allowedRoles={['investor']}>
-                    <StartupDetailsPage />
-                  </RoleProtectedRoute>
-                } />
+                  {/* Investor Routes */}
+                  <Route path="/investor-dashboard" element={
+                    <RoleProtectedRoute allowedRoles={['investor']}>
+                      <InvestorDashboard />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/transaction" element={
+                    <RoleProtectedRoute allowedRoles={['investor']}>
+                      <Transaction />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/browseStartups" element={
+                    <RoleProtectedRoute allowedRoles={['investor']}>
+                      <BrowseStartups />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/viewDetails/:id" element={
+                    <RoleProtectedRoute allowedRoles={['investor']}>
+                      <StartupDetailsPage />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/success" element={
+                    <RoleProtectedRoute allowedRoles={['investor']}>
+                      <Success />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/cancel" element={
+                    <RoleProtectedRoute allowedRoles={['investor']}>
+                      <Cancel />
+                    </RoleProtectedRoute>
+                  } />
 
-                {/* Admin Routes */}
-                <Route path="/admin" element={
-                  <RoleProtectedRoute allowedRoles={['admin']}>
-                    <Admin />
-                  </RoleProtectedRoute>
-                } />
+                  {/* Admin Routes */}
+                  <Route path="/admin" element={
+                    <RoleProtectedRoute allowedRoles={['admin']}>
+                      <Admin />
+                    </RoleProtectedRoute>
+                  } />
 
-                {/* Shared Routes */}
-                <Route path="/manage-ideas" element={
-                  <RoleProtectedRoute allowedRoles={['entrepreneur', 'admin']}>
-                    <ManageIdeas />
-                  </RoleProtectedRoute>
-                } />
-                <Route path="/user-profile" element={
-                  <RoleProtectedRoute allowedRoles={['entrepreneur', 'investor', 'admin']}>
-                    <UserProfile />
-                  </RoleProtectedRoute>
-                } />
-                <Route path="/manage-investment" element={
-                  <RoleProtectedRoute allowedRoles={['investor', 'admin']}>
-                    <ManageInvestments />
-                  </RoleProtectedRoute>
-                } />
-                <Route path="/success" element={
-                  <RoleProtectedRoute allowedRoles={['investor']}>
-                    <Success />
-                  </RoleProtectedRoute>
-                } />
-                <Route path="/cancel" element={
-                  <RoleProtectedRoute allowedRoles={['investor']}>
-                    <Cancel />
-                  </RoleProtectedRoute>
-                } />
-              </Routes>
-            </MainLayout>
-          } />
-        </Routes>
-      </Router>
+                  {/* Shared Routes */}
+                  <Route path="/manage-ideas" element={
+                    <RoleProtectedRoute allowedRoles={['entrepreneur', 'admin']}>
+                      <ManageIdeas />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/user-profile" element={
+                    <RoleProtectedRoute allowedRoles={['entrepreneur', 'investor', 'admin']}>
+                      <UserProfile />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/chatbot" element={
+                    <RoleProtectedRoute allowedRoles={['entrepreneur', 'investor',]}>
+                      <Chatbot/>
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/manage-investment" element={
+                    <RoleProtectedRoute allowedRoles={['investor', 'admin']}>
+                      <ManageInvestments />
+                    </RoleProtectedRoute>
+                  } />
+                </Routes>
+              </MainLayout>
+            } />
+          </Routes>
+        </Router>
+      </ThemeProvider>
     </AuthProvider>
   );
 }

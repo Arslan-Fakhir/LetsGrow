@@ -5,12 +5,12 @@ const WelcomeSection = ({ userName = "Entrepreneur" }) => {
   const greeting = currentTime < 12 ? "Good Morning" : currentTime < 18 ? "Good Afternoon" : "Good Evening"
 
   return (
-    <div className="welcome-section">
+    <div className="ws-welcome-section">
       <div className="card border-0 shadow-sm mb-4">
         <div className="card-body p-4">
           <div className="row align-items-center">
             <div className="col-md-8">
-              <h1 className="welcome-title mb-2">
+              <h1 className="ws-welcome-title mb-2">
                 {greeting}, {userName}! 👋
               </h1>
               <p className="welcome-subtitle mb-0">

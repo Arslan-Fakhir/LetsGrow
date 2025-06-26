@@ -78,7 +78,7 @@ const InvestorDashboard = () => {
   const investor = {
     name: auth.user.name,
     investedCount: investedCount,
-    image:auth.user.profileImage.url
+    image:auth.user.profileImage?.url
   }
   const stats = [
     {

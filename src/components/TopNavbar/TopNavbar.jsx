@@ -30,7 +30,7 @@ const TopNavbar = ({ toggleSidebar }) => {
     };
   }, []);
 
-  const profileImageUrl = auth.user?.profileImage?.url || "https://via.placeholder.com/40";
+  const profileImageUrl = auth.user?.profileImage?.url;
 
   return (
     <header className="bg-dark text-white py-2 px-3 d-flex align-items-center justify-content-between sticky-top">

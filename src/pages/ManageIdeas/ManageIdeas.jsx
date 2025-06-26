@@ -95,14 +95,19 @@ const ManageIdeas = () => {
   const handleFeedbackSubmit = async () => {
     try {
       const updatedStatus = actionType === "approve" ? "approved" : "rejected"
-      const res = await fetch(`${baseURL}/api/startups/${selectedIdea._id}`, {
-        method: "PUT",
+      const res = await fetch(`${baseURL}/api/startups/status/${selectedIdea._id}`, {
+        
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: updatedStatus, feedback }),
+        body: JSON.stringify({ status: updatedStatus, feedback:feedback }),
       })
-
-      if (!res.ok) throw new Error("Failed to update startup")
-
+      //
+      console.log("Data: ",selectedIdea._id)
+      //
+      if (!res.ok) {
+  const errorData = await res.json();
+  throw new Error(errorData.message || "Failed to update startup");
+}
       setShowFeedbackModal(false)
       setHasChanges(true)
       await fetchIdeas()

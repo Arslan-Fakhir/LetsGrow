@@ -21,7 +21,6 @@ const ProfileForm = ({ userData, isEditing, onCancel, onSubmit }) => {
   const [errors, setErrors] = useState({})
   const [imagePreview, setImagePreview] = useState(null)
 
-  // Update form data when userData changes
   useEffect(() => {
     if (userData) {
       setFormData({
@@ -37,7 +36,6 @@ const ProfileForm = ({ userData, isEditing, onCancel, onSubmit }) => {
         profileImage: null,
       })
 
-      // Set image preview if user has profile image
       if (userData.profileImage?.url) {
         setImagePreview(userData.profileImage.url)
       }
@@ -51,7 +49,6 @@ const ProfileForm = ({ userData, isEditing, onCancel, onSubmit }) => {
       [name]: value,
     })
 
-    // Clear error for this field
     if (errors[name]) {
       setErrors({
         ...errors,
@@ -63,7 +60,6 @@ const ProfileForm = ({ userData, isEditing, onCancel, onSubmit }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0]
     if (file) {
-      // Validate file type
       if (!file.type.startsWith("image/")) {
         setErrors({
           ...errors,
@@ -72,7 +68,6 @@ const ProfileForm = ({ userData, isEditing, onCancel, onSubmit }) => {
         return
       }
 
-      // Validate file size (5MB max)
       if (file.size > 5 * 1024 * 1024) {
         setErrors({
           ...errors,
@@ -86,14 +81,12 @@ const ProfileForm = ({ userData, isEditing, onCancel, onSubmit }) => {
         profileImage: file,
       })
 
-      // Create preview
       const reader = new FileReader()
       reader.onload = (e) => {
         setImagePreview(e.target.result)
       }
       reader.readAsDataURL(file)
 
-      // Clear any previous errors
       if (errors.profileImage) {
         setErrors({
           ...errors,
@@ -109,8 +102,6 @@ const ProfileForm = ({ userData, isEditing, onCancel, onSubmit }) => {
       profileImage: null,
     })
     setImagePreview(userData.profileImage?.url || null)
-
-    // Clear file input
     const fileInput = document.getElementById("profileImage")
     if (fileInput) {
       fileInput.value = ""
@@ -130,12 +121,10 @@ const ProfileForm = ({ userData, isEditing, onCancel, onSubmit }) => {
       newErrors.email = "Email is invalid"
     }
 
-    // CNIC validation
     if (formData.cnic && !/^\d{5}-\d{7}-\d{1}$/.test(formData.cnic)) {
       newErrors.cnic = "CNIC format should be XXXXX-XXXXXXX-X"
     }
 
-    // Contact number validation
     if (formData.contactNumber && !/^(\+92|0)[0-9]{10}$/.test(formData.contactNumber)) {
       newErrors.contactNumber = "Please enter a valid Pakistani phone number"
     }
@@ -152,28 +141,24 @@ const ProfileForm = ({ userData, isEditing, onCancel, onSubmit }) => {
     return Object.keys(newErrors).length === 0
   }
 
-  // In the handleSubmit function:
-const handleSubmit = (e) => {
-  e.preventDefault()
+  const handleSubmit = (e) => {
+    e.preventDefault()
 
-  if (validateForm()) {
-    // Prepare data to submit
-    const dataToSubmit = { 
-      ...formData,
-      address: formData.address // Ensure address is included
+    if (validateForm()) {
+      const dataToSubmit = { 
+        ...formData,
+        address: formData.address
+      }
+
+      if (!dataToSubmit.currentPassword) {
+        delete dataToSubmit.currentPassword
+        delete dataToSubmit.newPassword
+      }
+
+      onSubmit(dataToSubmit)
     }
-
-    // Remove password fields if they're empty
-    if (!dataToSubmit.currentPassword) {
-      delete dataToSubmit.currentPassword
-      delete dataToSubmit.newPassword
-    }
-
-    onSubmit(dataToSubmit)
   }
-}
 
-  // Render form fields in view mode
   const renderViewMode = () => {
     return (
       <div className="row g-3">
@@ -240,12 +225,10 @@ const handleSubmit = (e) => {
     )
   }
 
-  // Render form fields in edit mode
   const renderEditMode = () => {
     return (
       <form onSubmit={handleSubmit}>
         <div className="row g-3">
-          {/* Profile Image Upload */}
           <div className="col-12">
             <div className="form-group">
               <label className="form-label">Profile Image</label>
@@ -259,7 +242,7 @@ const handleSubmit = (e) => {
                     height="80"
                     style={{ objectFit: "cover" }}
                     onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/80"
+                      e.target.src = "/placeholder-user.png"
                     }}
                   />
                   {formData.profileImage && (

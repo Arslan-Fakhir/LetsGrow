@@ -19,6 +19,7 @@ import {
   Briefcase,
   User,
   AlertCircle,
+  BotIcon,
 } from "lucide-react"
 import "./Sidebar.css"
 
@@ -30,34 +31,35 @@ const getMenuItems = (role) => {
       main: [
         { name: "Dashboard", icon: Home, path: "/dashboard" },
         { name: "My Startup", icon: Briefcase, path: "/my-startup" },
-        { name: "Settings", icon: Settings, path: "/settings" },
+        { name: "My Profile", icon: Settings, path: "/user-profile" },
       ],
       additional: [
         { name: "Analytics", icon: PieChart, path: "/analytics" },
         { name: "Startup Progress", icon: Target, path: "/progress" },
-        { name: "Funding", icon: DollarSign, path: "/funding" },
+        { name: "ChatBot", icon: BotIcon, path: "/chatbot" },
       ],
     },
     investor: {
       main: [
-        { name: "Dashboard", icon: Home, path: "/dashboard" },
+        { name: "Dashboard", icon: Home, path: "/investor-dashboard" },
         { name: "Investment Portfolio", icon: DollarSign, path: "/portfolio" },
-        { name: "Startup Discovery", icon: Target, path: "/discover" },
-        { name: "Due Diligence", icon: FileText, path: "/due-diligence" },
-        { name: "Settings", icon: Settings, path: "/settings" },
+        { name: "Startup Discovery", icon: Target, path: "/browseStartups" },
+        { name: "My Profile", icon: Settings, path: "/user-profile" },
       ],
-      additional: [{ name: "Analytics", icon: PieChart, path: "/analytics" }],
+      additional: [
+        { name: "Analytics", icon: PieChart, path: "/analytics" },
+        { name: "ChatBot", icon: BotIcon, path: "/chatbot" }],
     },
     admin: {
       main: [
-        { name: "Dashboard", icon: Home, path: "/dashboard" },
+        { name: "Dashboard", icon: Home, path: "/admin" },
         { name: "Manage Users", icon: Users, path: "/users" },
-        { name: "Manage Startups", icon: Briefcase, path: "/startups" },
-        { name: "Manage Investments", icon: DollarSign, path: "/investments" },
-        { name: "Reports", icon: FileText, path: "/reports" },
-        { name: "Settings", icon: Settings, path: "/settings" },
+        { name: "Manage Startups", icon: Briefcase, path: "/manage-ideas" },
+        { name: "Manage Investments", icon: DollarSign, path: "/manage-investment" },
+        { name: "My Profile", icon: Settings, path: "/user-profile" },
       ],
-      additional: [{ name: "System Logs", icon: PieChart, path: "/logs" }],
+      additional: [
+        { name: "Reports", icon: FileText, path: "/reports"  }],
     },
   }
 

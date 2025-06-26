@@ -1,8 +1,8 @@
-.welcome-section {
+.ws-welcome-section {
   margin-bottom: 2rem;
 }
 
-.welcome-title {
+.ws-welcome-title {
   font-size: 2rem;
   font-weight: 700;
   color: #2c3e50;
@@ -24,11 +24,22 @@
 }
 
 @media (max-width: 768px) {
-  .welcome-title {
+  .ws-welcome-title {
     font-size: 1.5rem;
   }
 
   .welcome-date {
     margin-top: 1rem;
   }
+}
+.ws-welcome-section {
+  backdrop-filter: none !important;
+}
+
+.ws-welcome-title, .welcome-subtitle {
+  text-shadow: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  color: #2c3e50 !important; /* Your original color */
 }
