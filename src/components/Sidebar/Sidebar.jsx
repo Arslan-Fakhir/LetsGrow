@@ -387,13 +387,10 @@ const Sidebar = ({
               <div className="profile-avatar">
                 {userData?.profileImage?.url ? (
                   <img
-                    src={userData.profileImage.url || "/placeholder.svg"}
+                    src={userData.profileImage.url}
                     alt="Profile"
                     className="profile-image"
-                    onError={(e) => {
-                      e.target.onerror = null
-                      e.target.src = "https://via.placeholder.com/32"
-                    }}
+
                   />
                 ) : (
                   <div className="profile-placeholder">
