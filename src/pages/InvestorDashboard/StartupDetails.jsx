@@ -114,7 +114,7 @@ const StartupDetails = () => {
 
     
     ///////////////////////////////////////
-    //console.log('Frontend received session id: ',response.data.data.id)
+    console.log('Frontend received session id: ',response.data.data.id)
     //await new Promise(resolve => setTimeout(resolve, 5000)); // 5s wait
     ///////////////////////////////////////
 
@@ -125,8 +125,9 @@ const StartupDetails = () => {
       sessionId: response.data.data.id // Ensure correct response structure
     });
 
-    
+  
     if (error) {
+      
       throw error;
     }
 
