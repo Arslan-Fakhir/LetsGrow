@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react"
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import WelcomeSection from '../../components/Entrepreneur/layout/WelcomeSection';
 import StatsSection from '../../components/Entrepreneur/stats/StatsSection';
 import ActionsSection from '../../components/Entrepreneur/actions/ActionsSection';
 import ActivitySection from '../../components/Entrepreneur/activity/ActivitySection';
-import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+
 import "./EntrepreneurDashboard.css"
 
 const EntrepreneurDashboard = () => {

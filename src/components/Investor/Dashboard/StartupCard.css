@@ -72,10 +72,10 @@
   height: 100%;
 }
 
-.startup-name {
+.startup-name-card {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #111827;
+  color:#9333ea;
   margin: 0 0 0.25rem 0;
 }
 

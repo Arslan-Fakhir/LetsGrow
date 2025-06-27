@@ -42,7 +42,7 @@ const getMenuItems = (role) => {
     investor: {
       main: [
         { name: "Dashboard", icon: Home, path: "/investor-dashboard" },
-        { name: "Investment Portfolio", icon: DollarSign, path: "/portfolio" },
+        { name: "Investment Portfolio", icon: DollarSign, path: "/investor-portfolio" },
         { name: "Startup Discovery", icon: Target, path: "/browseStartups" },
         { name: "My Profile", icon: Settings, path: "/user-profile" },
       ],

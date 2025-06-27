@@ -99,7 +99,7 @@ const InvestorDashboard = () => {
     navigate("/browseStartups")
   }
   const handleInvestmentPortfolio = () => {
-    navigate("/investmentPortfolio")
+    navigate("/investor-portfolio")
   }
 
   const handleViewDetails = (startup) => {

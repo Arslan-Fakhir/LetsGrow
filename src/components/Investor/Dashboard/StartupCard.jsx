@@ -31,7 +31,7 @@ const StartupCard = ({ startup, onViewDetails }) => {
       <div className="startup-content">
         <div className="startup-info">
           <div className="startup-header">
-            <h3 className="startup-name">{startup.name}</h3>
+            <h3 className="startup-name-card">{startup.name}</h3>
             <p className="startup-founder">
               Founder: <span className="founder-name">{startup.entrepreneur.name}</span>
             </p>

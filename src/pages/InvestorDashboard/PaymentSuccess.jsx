@@ -65,7 +65,7 @@ const PaymentSuccess = () => {
                     <h1>Payment Verification Failed</h1>
                     <p className="error-message">{error}</p>
                     <button 
-                        className="back-to-dashboard-btn"
+                        className="back-to-dashboard-btn-success"
                         onClick={() => navigate('/investor-dashboard')}
                     >
                         <ArrowLeft className="me-2" />
@@ -85,7 +85,7 @@ const PaymentSuccess = () => {
                     Thank you for your investment.
                 </p>
                 <button 
-                    className="back-to-dashboard-btn"
+                    className="back-to-dashboard-btn-success"
                     onClick={() => navigate('/investor-dashboard')}
                 >
                     <ArrowLeft className="me-2" />

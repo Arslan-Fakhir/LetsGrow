@@ -24,6 +24,8 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 import Admin from "./pages/Admin/Admin";
 import Success from "./pages/InvestorDashboard/PaymentSuccess";
 import Cancel from "./pages/InvestorDashboard/PaymentCancel";
+import InvestorPortfolio from "./pages/InvestorPortfolio/InvestorPortfolio"
+
 import Chatbot from "./pages/Chatbot/Chatbot";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext"; // Make sure this path is correct
@@ -184,6 +186,11 @@ function App() {
                   <Route path="/cancel" element={
                     <RoleProtectedRoute allowedRoles={['investor']}>
                       <Cancel />
+                    </RoleProtectedRoute>
+                  } />
+                  <Route path="/investor-portfolio" element={
+                    <RoleProtectedRoute allowedRoles={['investor']}>
+                      <InvestorPortfolio/>
                     </RoleProtectedRoute>
                   } />
 

@@ -34,7 +34,7 @@
     margin-bottom: 25px;
 }
 
-.back-to-dashboard-btn {
+.back-to-dashboard-btn-success {
     background-color: #28a745;
     color: white;
     border: none;
@@ -46,7 +46,7 @@
     transition: background-color 0.3s;
 }
 
-.back-to-dashboard-btn:hover {
+.back-to-dashboard-btn-success:hover {
     background-color: #28a745;
     color: white;
 }
