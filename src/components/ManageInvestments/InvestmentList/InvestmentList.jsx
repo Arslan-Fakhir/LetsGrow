@@ -20,7 +20,7 @@ const InvestmentList = ({ investments, handleViewDetails, handleAction }) => {
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "PKR",
+      currency: "USD", // Change to PKR if needed
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount)
@@ -33,28 +33,24 @@ const InvestmentList = ({ investments, handleViewDetails, handleAction }) => {
           <table className="table table-hover align-middle mb-0 investment-table">
             <thead className="bg-light">
               <tr>
-                <th>Name</th>
+                <th>Investor Name</th>
                 <th>Amount</th>
-                <th>Program</th>
-                <th>Status</th>
+                <th>Startup</th>
+                <th>Payment Status</th>
                 <th className="text-center">Action</th>
               </tr>
             </thead>
             <tbody>
               {investments.length > 0 ? (
                 investments.map((investment) => (
-                  <tr key={investment.id} className="investment-row">
+                  <tr key={investment._id} className="investment-row">
                     <td className="fw-medium">{investment.investorName}</td>
                     <td>{formatCurrency(investment.amount)}</td>
-                    <td>{investment.program}</td>
+                    <td>{investment.startupTitle || "General Donation"}</td>
                     <td>
-                      {investment.status === "pending" ? (
-                        <span className="text-secondary">-</span>
-                      ) : (
-                        <span className={`badge ${getStatusBadgeClass(investment.status)}`}>
-                          {investment.status === "approved" ? "Approved" : "Rejected"}
-                        </span>
-                      )}
+                      <span className={`badge ${getStatusBadgeClass(investment.status)}`}>
+                        {investment.status.charAt(0).toUpperCase() + investment.status.slice(1)}
+                      </span>
                     </td>
                     <td>
                       <div className="d-flex justify-content-center gap-2">
@@ -84,14 +80,6 @@ const InvestmentList = ({ investments, handleViewDetails, handleAction }) => {
                             </button>
                           </>
                         )}
-
-                        {investment.status === "approved" && (
-                          <span className="text-success">
-                            <Check size={20} />
-                          </span>
-                        )}
-
-                        {investment.status === "rejected" && <span className="text-secondary">-</span>}
                       </div>
                     </td>
                   </tr>
@@ -112,4 +100,4 @@ const InvestmentList = ({ investments, handleViewDetails, handleAction }) => {
   )
 }
 
-export default InvestmentList;
+export default InvestmentList

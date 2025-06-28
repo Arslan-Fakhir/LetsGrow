@@ -12,22 +12,47 @@ const StatCard = ({
 }) => {
   const [displayValue, setDisplayValue] = useState(0);
   
-  // Format number with commas
+  // Enhanced format function that handles both numbers and strings
   const formatNumber = (num) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // If value is already formatted (like currency strings), return as-is
+    if (typeof num === 'string' && num.includes('$')) {
+      return num;
+    }
+    
+    const number = typeof num === 'string' ? parseFloat(num) : num;
+    
+    // Handle currency values
+    if (title.includes("Investment") || title.includes("Revenue")) {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0
+      }).format(number);
+    }
+    
+    // Regular number formatting
+    return new Intl.NumberFormat('en-US').format(number);
   };
   
-  // Animate the counter
+  // Animation effect
   useEffect(() => {
+    // Skip animation if value is already formatted (like currency strings)
+    if (typeof value === 'string' && value.includes('$')) {
+      setDisplayValue(value);
+      return;
+    }
+    
     const duration = 1500;
     const steps = 60;
     const stepTime = duration / steps;
     let currentStep = 0;
     
+    const numericValue = typeof value === 'string' ? parseFloat(value) : value;
+    
     const interval = setInterval(() => {
       currentStep++;
       const progress = Math.min(currentStep / steps, 1);
-      setDisplayValue(Math.floor(progress * value));
+      setDisplayValue(Math.floor(progress * numericValue));
       
       if (currentStep === steps) {
         clearInterval(interval);
@@ -36,6 +61,11 @@ const StatCard = ({
     
     return () => clearInterval(interval);
   }, [value]);
+
+  // Determine the final displayed value
+  const finalDisplayValue = typeof value === 'string' && value.includes('$') 
+    ? value 
+    : formatNumber(displayValue);
 
   return (
     <div className="stat-card">
@@ -57,8 +87,7 @@ const StatCard = ({
         <div className="stat-content">
           <h6 className="stat-title">{title}</h6>
           <h2 className="stat-value">
-            {title.includes("Investment") || title.includes("Revenue") ? "$" : ""}
-            {formatNumber(displayValue)}
+            {finalDisplayValue}
           </h2>
         </div>
         

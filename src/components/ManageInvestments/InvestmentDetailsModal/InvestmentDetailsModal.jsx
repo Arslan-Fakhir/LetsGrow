@@ -10,10 +10,21 @@ const InvestmentDetailsModal = ({ showDetailsModal, selectedInvestment, setShowD
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "PKR",
+      currency: "USD",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount)
+  }
+
+  // Format date
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A"
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    })
   }
 
   // Get status badge class
@@ -47,81 +58,83 @@ const InvestmentDetailsModal = ({ showDetailsModal, selectedInvestment, setShowD
             )}
           </div>
 
-          <div className="investment-amount mb-4">
-            <DollarSign size={20} className="me-2 text-success" />
+          <div className="investment-amount">
+            {/*<DollarSign size={18} className="me-2 text-success" />*/}
             <span className="fs-4 fw-bold">{formatCurrency(selectedInvestment.amount)}</span>
           </div>
 
           {/* Info Cards */}
-          <div className="row mb-4">
-            <div className="col-md-6 mb-3">
+          <div className="row">
+            <div className="col-md-6 mb-2">
               <div className="info-card">
                 <div className="info-card-icon">
-                  <User size={20} />
+                  <User size={16} />
                 </div>
                 <div className="info-card-content">
                   <h6 className="info-card-label">Investor</h6>
-                  <p className="info-card-value">{selectedInvestment.investorName}</p>
+                  <p className="info-card-value">{selectedInvestment.investorName || "N/A"}</p>
                 </div>
               </div>
             </div>
 
-            <div className="col-md-6 mb-3">
+            <div className="col-md-6 mb-2">
               <div className="info-card">
                 <div className="info-card-icon">
-                  <Briefcase size={20} />
-                </div>
-                <div className="info-card-content">
-                  <h6 className="info-card-label">Program</h6>
-                  <p className="info-card-value">{selectedInvestment.program || "-"}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-6 mb-3">
-              <div className="info-card">
-                <div className="info-card-icon">
-                  <Mail size={20} />
-                </div>
-                <div className="info-card-content">
-                  <h6 className="info-card-label">Email</h6>
-                  <p className="info-card-value">{selectedInvestment.investorEmail}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-6 mb-3">
-              <div className="info-card">
-                <div className="info-card-icon">
-                  <Phone size={20} />
-                </div>
-                <div className="info-card-content">
-                  <h6 className="info-card-label">Contact</h6>
-                  <p className="info-card-value">{selectedInvestment.investorPhone}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-6 mb-3">
-              <div className="info-card">
-                <div className="info-card-icon">
-                  <Calendar size={20} />
-                </div>
-                <div className="info-card-content">
-                  <h6 className="info-card-label">Submission Date</h6>
-                  <p className="info-card-value">{selectedInvestment.date}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-6 mb-3">
-              <div className="info-card">
-                <div className="info-card-icon">
-                  <Tag size={20} />
+                  <Briefcase size={16} />
                 </div>
                 <div className="info-card-content">
                   <h6 className="info-card-label">Startup</h6>
-                  <p className="info-card-value">{selectedInvestment.startupTitle || "-"}</p>
+                  <p className="info-card-value">{selectedInvestment.startupTitle || "General Donation"}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 mb-2">
+              <div className="info-card">
+                <div className="info-card-icon">
+                  <Mail size={16} />
+                </div>
+                <div className="info-card-content">
+                  <h6 className="info-card-label">Email</h6>
+                  <p className="info-card-value">{selectedInvestment.investorEmail || "N/A"}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 mb-2">
+              <div className="info-card">
+                <div className="info-card-icon">
+                  <Phone size={16} />
+                </div>
+                <div className="info-card-content">
+                  <h6 className="info-card-label">Contact</h6>
+                  <p className="info-card-value">{selectedInvestment.investorPhone || "N/A"}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 mb-2">
+              <div className="info-card">
+                <div className="info-card-icon">
+                  <Calendar size={16} />
+                </div>
+                <div className="info-card-content">
+                  <h6 className="info-card-label">Date</h6>
+                  <p className="info-card-value">{formatDate(selectedInvestment.date)}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-6 mb-2">
+              <div className="info-card">
+                <div className="info-card-icon">
+                  <Tag size={16} />
+                </div>
+                <div className="info-card-content">
+                  <h6 className="info-card-label">Payment Status</h6>
+                  <p className="info-card-value">
+                    {selectedInvestment.status.charAt(0).toUpperCase() + selectedInvestment.status.slice(1)}
+                  </p>
                 </div>
               </div>
             </div>
@@ -130,29 +143,16 @@ const InvestmentDetailsModal = ({ showDetailsModal, selectedInvestment, setShowD
           {/* Description Section */}
           <div className="investment-description-section">
             <h5 className="section-title">Description</h5>
-            <div className="investment-description p-3">{selectedInvestment.description}</div>
-          </div>
-
-          {/* Attachments Section */}
-          <div className="attachments-section mt-4">
-            <h5 className="section-title">Payment Proof & Attachments</h5>
-            <div className="attachments-list">
-              {selectedInvestment.attachments.map((attachment, index) => (
-                <div key={index} className="attachment-item">
-                  <FileText size={16} className="me-2" />
-                  <a href="#" className="text-decoration-none">
-                    {attachment}
-                  </a>
-                </div>
-              ))}
+            <div className="investment-description">
+              {selectedInvestment.description || `Investment in ${selectedInvestment.startupTitle || "the platform"}`}
             </div>
           </div>
 
           {/* Feedback Section */}
           {selectedInvestment.feedback && (
-            <div className="feedback-section mt-4">
+            <div className="feedback-section">
               <h5 className="section-title">Feedback</h5>
-              <div className="feedback-content p-3">{selectedInvestment.feedback}</div>
+              <div className="feedback-content">{selectedInvestment.feedback}</div>
             </div>
           )}
         </div>
@@ -167,7 +167,7 @@ const InvestmentDetailsModal = ({ showDetailsModal, selectedInvestment, setShowD
                   handleAction(selectedInvestment, "approve")
                 }}
               >
-                <Check size={16} className="me-1" /> Approve
+                <Check size={14} className="me-1" /> Approve
               </button>
               <button
                 className="btn btn-danger"
@@ -176,7 +176,7 @@ const InvestmentDetailsModal = ({ showDetailsModal, selectedInvestment, setShowD
                   handleAction(selectedInvestment, "reject")
                 }}
               >
-                <X size={16} className="me-1" /> Reject
+                <X size={14} className="me-1" /> Reject
               </button>
             </>
           )}
@@ -189,4 +189,4 @@ const InvestmentDetailsModal = ({ showDetailsModal, selectedInvestment, setShowD
   )
 }
 
-export default InvestmentDetailsModal;
+export default InvestmentDetailsModal

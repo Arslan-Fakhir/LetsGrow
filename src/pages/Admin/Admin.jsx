@@ -1,17 +1,54 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Users, DollarSign, Lightbulb, User, Briefcase, Gift } from 'lucide-react';
 import StatCard from "../../components/Admin/StatCard/StatCard";
-//import UserCard from "../../components/Admin/UserCard/UserCard";
 import ManagementCard from "../../components/Admin/ManagementCard/ManagementCard";
-//import ProgressChart from "../../components/Admin/ProgressChart/ProgressChart";
+import { getAdminStats, getPendingStartups } from '../../services/adminService';
 import "./Admin.css";
 
 const Admin = () => {
-  const reports = [
-    { title: "Monthly Report", period: "April 2023", link: "#" },
-    { title: "Quarterly Report", period: "Q1 2023", link: "#" },
-    { title: "Annual Report", period: "2022", link: "#" }
-  ];
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    totalInvestment: 0,
+    totalIdeas: 0,
+    totalEntrepreneurs: 0,
+    totalInvestors: 0,
+    pendingIdeas: 0,
+    approvedIdeas: 0,
+    rejectedIdeas: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [statsData, startups] = await Promise.all([
+          getAdminStats(),
+          getPendingStartups()
+        ]);
+        
+        setStats({
+          totalUsers: statsData.totalUsers,
+          totalInvestment: statsData.totalInvestment,
+          totalIdeas: statsData.totalStartups,
+          totalEntrepreneurs: statsData.totalEntrepreneurs,
+          totalInvestors: statsData.totalInvestors,
+          pendingIdeas: startups.length,
+          approvedIdeas: statsData.approvedStartups,
+          rejectedIdeas: statsData.rejectedStartups
+        });
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return <div className="admin-dashboard">Loading...</div>;
+  }
 
   return (
     <div className="admin-dashboard">
@@ -22,7 +59,6 @@ const Admin = () => {
               <h1 className="admin-title">Dashboard</h1>
               <p className="admin-subtitle">Welcome back, Admin! Here's what's happening today.</p>
             </div>
-            
           </div>
         </div>
 
@@ -31,7 +67,7 @@ const Admin = () => {
           <StatCard 
             icon={Users} 
             title="Total Users" 
-            value={12458} 
+            value={stats.totalUsers} 
             percentChange={12} 
             isPositive={true} 
             progressPercent={75} 
@@ -40,7 +76,7 @@ const Admin = () => {
           <StatCard 
             icon={DollarSign} 
             title="Total Investment" 
-            value={845200} 
+            value={`$${stats.totalInvestment?.toLocaleString('en-US') || '0'}`} 
             percentChange={8} 
             isPositive={true} 
             progressPercent={65} 
@@ -49,7 +85,7 @@ const Admin = () => {
           <StatCard 
             icon={Lightbulb} 
             title="Total Ideas" 
-            value={32} 
+            value={stats.totalIdeas} 
             percentChange={24} 
             isPositive={true} 
             progressPercent={85} 
@@ -63,7 +99,7 @@ const Admin = () => {
               <StatCard 
                 icon={User} 
                 title="Total Entrepreneurs" 
-                value={1245} 
+                value={stats.totalEntrepreneurs} 
                 percentChange={12} 
                 isPositive={true} 
                 progressPercent={12} 
@@ -72,7 +108,7 @@ const Admin = () => {
               <StatCard 
                 icon={Briefcase} 
                 title="Total investors"  
-                value={876} 
+                value={stats.totalInvestors} 
                 percentChange={8} 
                 isPositive={true} 
                 progressPercent={80} 
@@ -91,15 +127,15 @@ const Admin = () => {
                   title="Manage Ideas" 
                   color="primary" 
                   totalLabel="Total Ideas" 
-                  totalValue={3254} 
+                  totalValue={stats.totalIdeas} 
                   pendingLabel="Pending" 
-                  pendingValue={42} 
+                  pendingValue={stats.pendingIdeas} 
                   pendingColor="warning" 
                   leftLabel="Approved" 
-                  leftValue={2845} 
+                  leftValue={stats.approvedIdeas} 
                   rightLabel="Rejected" 
-                  rightValue={367} 
-                  progressPercent={75} 
+                  rightValue={stats.rejectedIdeas} 
+                  progressPercent={(stats.approvedIdeas / stats.totalIdeas) * 100} 
                   path="/manage-ideas" 
                 />
                 <ManagementCard 
@@ -107,21 +143,19 @@ const Admin = () => {
                   title="Manage Investment" 
                   color="success" 
                   totalLabel="Total Amount" 
-                  totalValue={542680} 
+                  totalValue={`$${stats.totalInvestment.toLocaleString()}`} 
                   pendingLabel="This Month" 
-                  pendingValue={48250} 
+                  pendingValue={stats.totalInvestment * 0.1} // Example calculation
                   pendingColor="success" 
-                  leftLabel="Donors" 
-                  leftValue={1245} 
-                  rightLabel="Campaigns" 
-                  rightValue={24} 
+                  leftLabel="Investors" 
+                  leftValue={stats.totalInvestors} 
+                  rightLabel="Startups" 
+                  rightValue={stats.approvedIdeas} 
                   progressPercent={65} 
                   path="/manage-investment" 
                 />
               </div>
             </div>
-
-            
           </div>
         </div>
       </div>
