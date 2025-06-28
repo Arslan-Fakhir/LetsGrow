@@ -1,0 +1,34 @@
+.login-card {
+  transition: transform 0.2s ease-in-out;
+  
+}
+
+.login-card:hover {
+  transform: translateY(-5px);
+}
+
+.login-button {
+  transition: all 0.3s ease;
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(16, 185, 129, 0.1);
+}
+
+.forgot-password-link {
+  transition: color 0.3s ease;
+}
+
+.forgot-password-link:hover {
+  color: #059669 !important;
+}
+
+.signup-link {
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.signup-link:hover {
+  color: #059669 !important;
+}

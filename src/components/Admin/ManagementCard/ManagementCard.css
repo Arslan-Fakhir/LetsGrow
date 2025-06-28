@@ -1,0 +1,266 @@
+.management-card {
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.management-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: 20px 20px 0 0;
+  transition: all 0.3s ease;
+}
+
+.management-card:hover::before {
+  height: 8px;
+}
+
+.management-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.management-card-body {
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.management-header {
+  text-align: center;
+}
+
+.management-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  position: relative;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.management-icon-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 18px;
+  opacity: 0.1;
+  transition: opacity 0.3s ease;
+}
+
+.management-card:hover .management-icon-bg {
+  opacity: 0.2;
+}
+
+.management-icon-primary { color: #0d6efd; }
+.management-icon-primary .management-icon-bg { background: #0d6efd; }
+.management-card.management-icon-primary::before { background: linear-gradient(90deg, #0d6efd, #6610f2); }
+
+.management-icon-success { color: #198754; }
+.management-icon-success .management-icon-bg { background: #198754; }
+.management-card.management-icon-success::before { background: linear-gradient(90deg, #198754, #20c997); }
+
+.management-icon-warning { color: #ffc107; }
+.management-icon-warning .management-icon-bg { background: #ffc107; }
+.management-card.management-icon-warning::before { background: linear-gradient(90deg, #ffc107, #fd7e14); }
+
+.management-icon-danger { color: #dc3545; }
+.management-icon-danger .management-icon-bg { background: #dc3545; }
+.management-card.management-icon-danger::before { background: linear-gradient(90deg, #dc3545, #e91e63); }
+
+.management-icon-info { color: #0dcaf0; }
+.management-icon-info .management-icon-bg { background: #0dcaf0; }
+.management-card.management-icon-info::before { background: linear-gradient(90deg, #0dcaf0, #6f42c1); }
+
+.management-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.management-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(248, 249, 250, 0.5);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.management-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.management-stat-label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.management-stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.management-stat-primary { color: #0d6efd; }
+.management-stat-success { color: #198754; }
+.management-stat-warning { color: #ffc107; }
+.management-stat-danger { color: #dc3545; }
+.management-stat-info { color: #0dcaf0; }
+
+.management-progress {
+  flex-grow: 1;
+}
+
+.management-progress-bar {
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.management-progress-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.management-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.management-progress-primary { background: linear-gradient(90deg, #0d6efd, #6610f2); }
+.management-progress-success { background: linear-gradient(90deg, #198754, #20c997); }
+.management-progress-warning { background: linear-gradient(90deg, #ffc107, #fd7e14); }
+.management-progress-danger { background: linear-gradient(90deg, #dc3545, #e91e63); }
+.management-progress-info { background: linear-gradient(90deg, #0dcaf0, #6f42c1); }
+
+.management-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.management-btn {
+  width: 100%;
+  padding: 1rem 2rem;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: white;
+}
+
+.management-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.management-btn:hover::before {
+  left: 100%;
+}
+
+.management-btn-arrow {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.management-btn:hover .management-btn-arrow {
+  transform: translateX(4px);
+}
+
+.management-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.management-btn-primary { background: linear-gradient(135deg, #0d6efd, #6610f2); }
+.management-btn-success { background: linear-gradient(135deg, #198754, #20c997); }
+.management-btn-warning { background: linear-gradient(135deg, #ffc107, #fd7e14); }
+.management-btn-danger { background: linear-gradient(135deg, #dc3545, #e91e63); }
+.management-btn-info { background: linear-gradient(135deg, #0dcaf0, #6f42c1); }
+
+@media (max-width: 768px) {
+  .management-card-body {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .management-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .management-stats {
+    padding: 1rem;
+  }
+  
+  .management-stat-value {
+    font-size: 1.25rem;
+  }
+}

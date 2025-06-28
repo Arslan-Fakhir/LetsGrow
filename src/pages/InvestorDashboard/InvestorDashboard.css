@@ -1,0 +1,32 @@
+.dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc, #ffffff, #f1f5f9);
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.header-section {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .header-section {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-content {
+    padding: 1rem 0.5rem;
+  }
+}

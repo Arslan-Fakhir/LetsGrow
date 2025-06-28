@@ -1,0 +1,33 @@
+.filter-tabs-container {
+    margin-top: 1rem;
+  }
+  
+  .nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .nav-tabs .nav-link {
+    margin-bottom: -1px;
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    color: #495057;
+    cursor: pointer;
+  }
+  
+  .nav-tabs .nav-link:hover {
+    border-color: #e9ecef #e9ecef #dee2e6;
+  }
+  
+  .nav-tabs .nav-link.active {
+    color: #198754;
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+    font-weight: 500;
+  }
+  
+  .nav-tabs .nav-link .badge {
+    font-size: 0.7rem;
+    padding: 0.25em 0.5em;
+  }
+  

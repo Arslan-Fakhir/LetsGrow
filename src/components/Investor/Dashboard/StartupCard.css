@@ -1,0 +1,147 @@
+.startup-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.startup-card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-4px);
+}
+
+.startup-image-container {
+  position: relative;
+}
+
+.startup-image {
+  width: 100%;
+  height: 12rem;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.startup-card:hover .startup-image {
+  transform: scale(1.05);
+}
+
+.startup-status {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-active {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-growing {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.status-expanding {
+  background-color: #e9d5ff;
+  color: #7c3aed;
+}
+
+.startup-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.startup-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+}
+
+.startup-name-card {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color:#9333ea;
+  margin: 0 0 0.25rem 0;
+}
+
+.startup-founder {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.founder-name {
+  font-weight: 500;
+}
+
+.startup-description {
+  color: #374151;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  flex-grow: 1;
+  margin: 0;
+}
+
+.startup-investment {
+  padding-top: 0.5rem;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  justify-content: center;
+}
+
+.investment-info {
+  text-align: center;
+}
+
+.investment-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.investment-amount {
+  font-weight: 700;
+  color: #111827;
+  margin: 0.25rem 0 0 0;
+}
+
+.view-details-button {
+  width: 100%;
+  background: linear-gradient(135deg, #2563eb, #9333ea);
+  color: white;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.view-details-button:hover {
+  background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.button-icon {
+  font-size: 1rem;
+}

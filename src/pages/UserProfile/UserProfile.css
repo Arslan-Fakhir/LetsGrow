@@ -1,0 +1,19 @@
+.user-profile-container {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.breadcrumb-item a {
+  color: #198754;
+}
+
+.breadcrumb-item.active {
+  color: #6c757d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .user-profile-container {
+    padding: 1rem !important;
+  }
+}

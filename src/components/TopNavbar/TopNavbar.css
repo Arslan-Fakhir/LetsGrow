@@ -1,0 +1,35 @@
+/* Custom styles to enhance Bootstrap */
+.nav-link-hover {
+  transition: all 0.3s ease;
+}
+
+.nav-link-hover:hover {
+  color: #4ade80 !important;
+}
+
+.custom-dropdown-menu {
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.custom-dropdown-item {
+  transition: background-color 0.2s;
+}
+
+.custom-dropdown-item:hover {
+  background-color: #f8f9fa !important;
+}
+
+.object-fit-cover {
+  object-fit: cover;
+}
+
+/* Ensure proper spacing for the navbar */
+header {
+  min-height: 64px;
+}
+
+/* Profile image border */
+.profile-button img {
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}

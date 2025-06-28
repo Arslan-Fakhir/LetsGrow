@@ -1,0 +1,45 @@
+.ws-welcome-section {
+  margin-bottom: 2rem;
+}
+
+.ws-welcome-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.welcome-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  line-height: 1.5;
+}
+
+.welcome-date {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  color: white;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .ws-welcome-title {
+    font-size: 1.5rem;
+  }
+
+  .welcome-date {
+    margin-top: 1rem;
+  }
+}
+.ws-welcome-section {
+  backdrop-filter: none !important;
+}
+
+.ws-welcome-title, .welcome-subtitle {
+  text-shadow: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: initial !important;
+  color: #2c3e50 !important; /* Your original color */
+}

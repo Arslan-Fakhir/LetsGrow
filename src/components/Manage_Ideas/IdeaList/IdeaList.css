@@ -1,0 +1,57 @@
+/* Table styles */
+.idea-table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  
+  .idea-table th {
+    font-weight: 600;
+    color: #495057;
+    padding: 1rem;
+    border-top: none;
+  }
+  
+  .idea-table td {
+    vertical-align: middle;
+    padding: 1rem;
+  }
+  
+  .idea-table tbody tr {
+    transition: all 0.2s ease;
+  }
+  
+  .idea-table tbody tr:hover {
+    background-color: rgba(25, 135, 84, 0.05);
+  }
+  
+  .idea-title-cell {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  /* Status badge styles */
+  .badge {
+    padding: 0.5em 0.75em;
+    font-weight: 500;
+    font-size: 0.75rem;
+  }
+  
+  /* Action buttons */
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .table-responsive {
+      border: 0;
+    }
+  
+    .idea-table th,
+    .idea-table td {
+      padding: 0.75rem;
+    }
+  }
+  

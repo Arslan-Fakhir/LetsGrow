@@ -1,22 +1,42 @@
-:root {
-  font-family: Inter, system-ui, sans-serif;
+/* Custom styles */
+body {
+  background-color: #f8f9fa;
 }
 
-.btn-custom {
-  background-color: #10B981;
-  color: white;
-  border: none;
+/* Animation classes */
+.hover-lift {
+  transition: transform 0.2s ease-in-out;
 }
 
-.btn-custom:hover {
-  background-color: #059669;
-  color: white;
+.hover-lift:hover {
+  transform: translateY(-4px);
 }
 
-.text-custom {
-  color: #10B981;
+.hover-shadow:hover {
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
 }
 
-.bg-custom {
-  background-color: #10B981;
+/* Custom colors */
+.bg-custom-blue {
+  background-color: #e3f2fd;
+}
+
+.bg-custom-green {
+  background-color: #e8f5e9;
+}
+
+.bg-custom-amber {
+  background-color: #fff8e1;
+}
+
+.text-custom-blue {
+  color: #1976d2;
+}
+
+.text-custom-green {
+  color: #2e7d32;
+}
+
+.text-custom-amber {
+  color: #ff8f00;
 }
