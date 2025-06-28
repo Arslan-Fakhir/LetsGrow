@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import "./StatCard.css";
 
-const StatCard = ({ icon: Icon, title, value, percentChange, isPositive = true, progressPercent = 75, color = "primary" }) => {
+const StatCard = ({ 
+  icon: Icon, 
+  title, 
+  value, 
+  percentChange, 
+  isPositive = true, 
+  progressPercent = 75, 
+  color = "primary" 
+}) => {
   const [displayValue, setDisplayValue] = useState(0);
   
   // Format number with commas
@@ -30,26 +38,38 @@ const StatCard = ({ icon: Icon, title, value, percentChange, isPositive = true, 
   }, [value]);
 
   return (
-    <div className="card border-0 shadow-sm h-100 stat-card">
-      <div className="card-body">
-        <div className="d-flex align-items-center justify-content-between mb-3">
-          <div className={`bg-${color} bg-opacity-10 rounded-3 p-2`}>
-            <Icon size={24} className={`text-${color}`} />
+    <div className="stat-card">
+      <div className="stat-card-body">
+        <div className="stat-card-header">
+          <div className={`stat-icon stat-icon-${color}`}>
+            <Icon size={28} />
           </div>
-          <span className={`badge bg-${isPositive ? 'success' : 'danger'}`}>
-            {isPositive ? '+' : '-'}{Math.abs(percentChange)}% {isPositive ? '↑' : '↓'}
-          </span>
+          <div className={`stat-badge stat-badge-${isPositive ? 'positive' : 'negative'}`}>
+            <span className="stat-badge-text">
+              {isPositive ? '+' : '-'}{Math.abs(percentChange)}%
+            </span>
+            <span className="stat-badge-arrow">
+              {isPositive ? '↗' : '↘'}
+            </span>
+          </div>
         </div>
-        <h6 className="text-muted mb-1">{title}</h6>
-        <h3 className="fw-bold mb-0 counter-value">
-          {title.includes("Revenue") ? "$" : ""}{formatNumber(displayValue)}
-        </h3>
-        <div className="progress mt-3" style={{ height: "4px" }}>
-          <div 
-            className={`progress-bar bg-${color}`} 
-            style={{ width: `${progressPercent}%` }} 
-            role="progressbar"
-          ></div>
+        
+        <div className="stat-content">
+          <h6 className="stat-title">{title}</h6>
+          <h2 className="stat-value">
+            {title.includes("Investment") || title.includes("Revenue") ? "$" : ""}
+            {formatNumber(displayValue)}
+          </h2>
+        </div>
+        
+        <div className="stat-progress">
+          <div className="stat-progress-bar">
+            <div 
+              className={`stat-progress-fill stat-progress-${color}`}
+              style={{ width: `${progressPercent}%` }}
+            ></div>
+          </div>
+          <span className="stat-progress-text">{progressPercent}% of target</span>
         </div>
       </div>
     </div>

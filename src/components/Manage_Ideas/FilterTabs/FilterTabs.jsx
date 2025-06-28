@@ -5,7 +5,7 @@ import "./FilterTabs.css"
 const FilterTabs = ({ filterStatus, setFilterStatus, pendingCount, approvedCount, rejectedCount, totalCount }) => {
   return (
     <div className="filter-tabs-container mb-4">
-      <ul className="nav nav-tabs">
+      <ul className="nav nav-tabs-list">
         <li className="nav-item">
           <button
             className={`nav-link ${filterStatus === "all" ? "active" : ""}`}

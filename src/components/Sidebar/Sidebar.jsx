@@ -32,10 +32,9 @@ const getMenuItems = (role) => {
         { name: "Dashboard", icon: Home, path: "/dashboard" },
         { name: "My Startup", icon: Briefcase, path: "/my-startup" },
         { name: "My Profile", icon: Settings, path: "/user-profile" },
+        { name: "Startup Progress", icon: Target, path: "/startup-progress" },
       ],
       additional: [
-        { name: "Analytics", icon: PieChart, path: "/analytics" },
-        { name: "Startup Progress", icon: Target, path: "/progress" },
         { name: "ChatBot", icon: BotIcon, path: "/chatbot" },
       ],
     },
@@ -47,19 +46,18 @@ const getMenuItems = (role) => {
         { name: "My Profile", icon: Settings, path: "/user-profile" },
       ],
       additional: [
-        { name: "Analytics", icon: PieChart, path: "/analytics" },
         { name: "ChatBot", icon: BotIcon, path: "/chatbot" }],
     },
     admin: {
       main: [
         { name: "Dashboard", icon: Home, path: "/admin" },
         { name: "Manage Users", icon: Users, path: "/users" },
-        { name: "Manage Startups", icon: Briefcase, path: "/manage-ideas" },
+        { name: "Manage Ideas", icon: Briefcase, path: "/manage-ideas" },
         { name: "Manage Investments", icon: DollarSign, path: "/manage-investment" },
         { name: "My Profile", icon: Settings, path: "/user-profile" },
       ],
       additional: [
-        { name: "Reports", icon: FileText, path: "/reports"  }],
+        { name: "ChatBot", icon: BotIcon, path: "/chatbot" }],
     },
   }
 

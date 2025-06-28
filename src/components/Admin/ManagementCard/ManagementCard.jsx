@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import "./ManagementCard.css";
 
 const ManagementCard = ({ 
@@ -19,44 +18,59 @@ const ManagementCard = ({
 }) => {
   // Format number with commas
   const formatNumber = (num) => {
+    if (typeof num === 'string') return num;
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
+  const handleClick = () => {
+    if (path !== "#") {
+      window.location.href = path;
+    }
+  };
+
   return (
-    <Link to={path} className="text-decoration-none">
-      <div className="card h-100 border-0 shadow-sm management-card">
-        <div className="card-body p-4">
-          <div className="text-center mb-3">
-            <div className={`bg-${color} bg-opacity-10 rounded-circle p-3 d-inline-block mb-3`}>
-              <Icon size={36} className={`text-${color}`} />
-            </div>
-            <h3 className="fs-5 fw-bold">{title}</h3>
+    <div className="management-card" onClick={handleClick}>
+      <div className="management-card-body">
+        <div className="management-header">
+          <div className={`management-icon management-icon-${color}`}>
+            <Icon size={32} />
+            <div className="management-icon-bg"></div>
           </div>
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <div>
-              <div className="text-muted small">{totalLabel}</div>
-              <div className="fw-bold">{formatNumber(totalValue)}</div>
-            </div>
-            <div>
-              <div className="text-muted small">{pendingLabel}</div>
-              <div className={`fw-bold text-${pendingColor}`}>{formatNumber(pendingValue)}</div>
-            </div>
+          <h3 className="management-title">{title}</h3>
+        </div>
+        
+        <div className="management-stats">
+          <div className="management-stat">
+            <span className="management-stat-label">{totalLabel}</span>
+            <span className="management-stat-value">{formatNumber(totalValue)}</span>
           </div>
-          <div className="progress mb-3" style={{ height: "6px" }}>
-            <div
-              className={`progress-bar bg-${color}`}
+          <div className="management-stat">
+            <span className="management-stat-label">{pendingLabel}</span>
+            <span className={`management-stat-value management-stat-${pendingColor}`}>
+              {formatNumber(pendingValue)}
+            </span>
+          </div>
+        </div>
+        
+        <div className="management-progress">
+          <div className="management-progress-bar">
+            <div 
+              className={`management-progress-fill management-progress-${color}`}
               style={{ width: `${progressPercent}%` }}
-              role="progressbar"
             ></div>
           </div>
-          <div className="d-flex justify-content-between small text-muted mb-3">
+          <div className="management-progress-labels">
             <span>{leftLabel}: {formatNumber(leftValue)}</span>
             <span>{rightLabel}: {formatNumber(rightValue)}</span>
           </div>
-          <button className={`btn btn-${color} w-100`}>{title}</button>
         </div>
+        
+        <button className={`management-btn management-btn-${color}`}>
+          <span>{title}</span>
+          <div className="management-btn-arrow">→</div>
+        </button>
       </div>
-    </Link>
+    </div>
   );
 };
 

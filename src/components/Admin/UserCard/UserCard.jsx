@@ -1,14 +1,13 @@
-import { User, Briefcase, TrendingUp } from 'lucide-react'; // Added TrendingUp import
-import { Link } from "react-router-dom";
+import { TrendingUp } from 'lucide-react';
 import "./UserCard.css";
 
 const UserCard = ({ 
-  icon: Icon = User, 
+  icon: Icon, 
   title = "Total", 
-  subtitle = "Entrepreneur", 
+  subtitle = "Users", 
   value = 1245, 
   percentChange = 12, 
-  infoText = "124 new entrepreneurs this month",
+  infoText = "New users this month",
   buttonText = "View Details",
   buttonVariant = "outline-primary",
   path = "#",
@@ -19,31 +18,44 @@ const UserCard = ({
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
+  const handleClick = () => {
+    if (path !== "#") {
+      window.location.href = path;
+    }
+  };
+
   return (
-    <div className="card border-0 shadow-sm h-100 hover-card">
-      <div className="card-body p-4 text-center">
-        <div
-          className="bg-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3 shadow-sm border"
-          style={{ width: "80px", height: "80px" }}
-        >
-          <Icon size={36} className={`text-${iconColor}`} />
+    <div className="user-card" onClick={handleClick}>
+      <div className="user-card-body">
+        <div className={`user-icon user-icon-${iconColor}`}>
+          <Icon size={40} />
+          <div className="user-icon-glow"></div>
         </div>
-        <h2 className="fs-4 fw-bold mb-1">{title}</h2>
-        <h3 className="fs-4 fw-bold mb-3">{subtitle}</h3>
-        <div className="d-flex justify-content-center align-items-center gap-2">
-          <span className="fs-3 fw-bold text-success">{formatNumber(value)}</span>
-          <span className="badge bg-success d-flex align-items-center">
-            <TrendingUp size={14} className="me-1" /> {percentChange}%
-          </span>
-        </div>
-        <div className="mt-3 text-muted small">
-          {infoText}
+        
+        <div className="user-content">
+          <div className="user-header">
+            <h3 className="user-title">{title}</h3>
+            <h4 className="user-subtitle">{subtitle}</h4>
+          </div>
+          
+          <div className="user-stats">
+            <div className="user-value">{formatNumber(value)}</div>
+            <div className="user-change">
+              <TrendingUp size={16} />
+              <span>{percentChange}%</span>
+            </div>
+          </div>
+          
+          <div className="user-info">
+            {infoText}
+          </div>
         </div>
       </div>
-      <div className="card-footer bg-transparent border-0 p-3">
-        <Link to={path} className={`btn btn-${buttonVariant} w-100`}>
+      
+      <div className="user-card-footer">
+        <button className={`user-btn user-btn-${buttonVariant}`}>
           {buttonText}
-        </Link>
+        </button>
       </div>
     </div>
   );

@@ -201,7 +201,7 @@ const InvestorPortfolio = () => {
                   <i className="bi bi-percent text-white"></i>
                 </div>
                 <div className="ms-3">
-                  <h3 className="metric-value mb-1">14%</h3>
+                  <h3 className="metric-value mb-1">0%</h3>
                   <p className="metric-label mb-0">Average ROI</p>
                   <small className="text-success">
                     <i className="bi bi-arrow-up"></i> Above market average

@@ -213,7 +213,7 @@ function App() {
                     </RoleProtectedRoute>
                   } />
                   <Route path="/chatbot" element={
-                    <RoleProtectedRoute allowedRoles={['entrepreneur', 'investor',]}>
+                    <RoleProtectedRoute allowedRoles={['entrepreneur', 'investor','admin']}>
                       <Chatbot/>
                     </RoleProtectedRoute>
                   } />
